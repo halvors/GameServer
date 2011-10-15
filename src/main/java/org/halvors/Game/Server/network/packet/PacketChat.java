@@ -7,11 +7,7 @@ import java.io.IOException;
 public class PacketChat extends Packet {
 	public String message;
 
-	public PacketChat(String message) {
-//		if (message.length() > 119) {
-//			message = message.substring(0, 119);
-//		}
-		
+	public PacketChat(String message) {	
 		this.message = message;
 	}
 	

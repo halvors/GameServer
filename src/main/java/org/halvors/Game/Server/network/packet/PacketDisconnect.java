@@ -5,10 +5,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class PacketDisconnect extends Packet {
-	private String reason;
+	public String reason;
 	
-	public PacketDisconnect() {
-		
+	public PacketDisconnect(String reason) {
+		this.reason = reason;
 	}
 	
 	@Override

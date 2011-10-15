@@ -4,14 +4,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import main.java.org.halvors.Game.Server.GameServer;
-
 public class PacketLogin extends Packet {
 	public String username;
-	public String version = GameServer.getInstance().getVersion();
+	public String version;
 	
-	public PacketLogin(String username) {
+	public PacketLogin(String username, String version) {
 		this.username = username;
+		this.version = version;
 	}
 	
 	@Override
