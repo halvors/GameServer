@@ -6,7 +6,11 @@ import java.io.IOException;
 
 public class PacketChat extends Packet {
 	public String message;
-
+	
+	public PacketChat() {
+		
+	}
+	
 	public PacketChat(String message) {	
 		this.message = message;
 	}

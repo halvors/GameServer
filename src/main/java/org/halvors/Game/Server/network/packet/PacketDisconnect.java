@@ -7,6 +7,10 @@ import java.io.IOException;
 public class PacketDisconnect extends Packet {
 	public String reason;
 	
+	public PacketDisconnect() {
+		
+	}
+	
 	public PacketDisconnect(String reason) {
 		this.reason = reason;
 	}

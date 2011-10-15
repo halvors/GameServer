@@ -8,6 +8,10 @@ public class PacketLogin extends Packet {
 	public String username;
 	public String version;
 	
+	public PacketLogin() {
+		
+	}
+	
 	public PacketLogin(String username, String version) {
 		this.username = username;
 		this.version = version;
