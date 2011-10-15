@@ -10,8 +10,6 @@ import main.java.org.halvors.Game.Server.network.NetworkServerHandler;
 
 /**
  * Represents a base packet.
- * 
- * @author halvors
  */
 public abstract class Packet {
 	private static HashMap<Integer, Class<?>> packetIdToClassMap = new HashMap<Integer, Class<?>>();
