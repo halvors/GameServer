@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import main.java.org.halvors.Game.Server.GameServer;
-import main.java.org.halvors.Game.Server.LoginHandler;
 
 public class NetworkListenThread extends Thread {
 	private final GameServer server;
@@ -51,10 +50,6 @@ public class NetworkListenThread extends Thread {
 
 	public List<NetworkManager> getClients() {
 		return clients;
-	}
-
-	public LoginHandler getLoginHandler() {
-		return loginHandler;
 	}
 	
 	public boolean hasClient(Socket socket) {

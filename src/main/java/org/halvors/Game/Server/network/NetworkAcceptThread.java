@@ -43,4 +43,8 @@ public class NetworkAcceptThread extends Thread {
 			pendingConnections.remove(socket);
 		}
 	}
+	
+	public LoginHandler getLoginHandler() {
+		return loginHandler;
+	}
 }

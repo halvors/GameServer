@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import main.java.org.halvors.Game.Server.GameServer;
-import main.java.org.halvors.Game.Server.LoginHandler;
 import main.java.org.halvors.Game.Server.entity.Player;
 import main.java.org.halvors.Game.Server.network.packet.Packet;
 
@@ -17,9 +16,8 @@ public class NetworkManager {
 	private final Thread readThread;
 	private final Thread writeThread;
 	
-	public NetworkManager(Socket socket, LoginHandler loginHandler) {
+	public NetworkManager(Socket socket) {
 		this.socket = socket;
-		this.loginHandler = loginHandler;
 		this.networkServerHandler = new NetworkServerHandler(GameServer.getInstance(), this);
 		this.readThread = new NetworkReaderThread(this);
         this.writeThread = new NetworkWriterThread(this);
