@@ -21,7 +21,7 @@ public abstract class Packet {
         addIdClassMapping(255, PacketDisconnect.class);
     }
     
-	public static Packet readPacket(DataInputStream input) throws IOException {
+	public static Packet readPacket(DataInputStream input) {
 		try {
 			// Read the id form the DataInputStream.
             int id = input.read();
@@ -48,7 +48,7 @@ public abstract class Packet {
 		return null;
 	}
 	
-    public void writePacket(Packet packet, DataOutputStream output) throws IOException {
+    public void writePacket(Packet packet, DataOutputStream output){
         output.write(packet.getPacketId());
         packet.writePacketData(output);
     }

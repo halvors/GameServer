@@ -69,7 +69,7 @@ public class NetworkListenThread extends Thread {
 	public void addClient(Socket socket) {
 		if (!clients.contains(socket)) {
 			// Create a new NetworkManager and add it to the clients list.
-			NetworkManager networkManager = new NetworkManager(socket, loginHandler);
+			NetworkManager networkManager = new NetworkManager(socket);
 			clients.add(networkManager);
 		}
 	}
