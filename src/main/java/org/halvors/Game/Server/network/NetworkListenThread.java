@@ -15,13 +15,16 @@ import main.java.org.halvors.Game.Server.LoginHandler;
 public class NetworkListenThread extends Thread {
 	private final GameServer server;
 	private final ServerSocket serverSocket;
+	private final NetworkAcceptThread networkAcceptThread;
 	private final List<NetworkManager> clients = Collections.synchronizedList(new ArrayList<NetworkManager>());
-	private final LoginHandler loginHandler;
 	
 	public NetworkListenThread(GameServer server, InetAddress address, int port) throws IOException {
 		this.server = server;
 		this.serverSocket = new ServerSocket(port, 0, address);
-		this.loginHandler = new LoginHandler(server);
+		
+		// Accept connections and logins here before we register a new NetworkManager.
+		this.networkAcceptThread = new NetworkAcceptThread(server);
+		networkAcceptThread.start();
 	}
 	
 	public void run() {
@@ -30,8 +33,10 @@ public class NetworkListenThread extends Thread {
 				Socket socket = serverSocket.accept();
 				
 				if (socket != null && socket.isBound()) {
-					// Add the socket to the clients list.
-					addClient(socket);
+					// Add the socket to the pending connections list.
+					networkAcceptThread.addToPendigConnections(socket);
+					networkAcceptThread.notify();
+					
 					server.log(Level.INFO, "Connection accepted from: " + socket.getRemoteSocketAddress().toString());
 				}
 			} catch (IOException e) {

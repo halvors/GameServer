@@ -6,6 +6,7 @@ import java.util.Queue;
 
 import main.java.org.halvors.Game.Server.GameServer;
 import main.java.org.halvors.Game.Server.LoginHandler;
+import main.java.org.halvors.Game.Server.entity.Player;
 import main.java.org.halvors.Game.Server.network.packet.Packet;
 
 public class NetworkManager {
@@ -26,11 +27,27 @@ public class NetworkManager {
         writeThread.start();
 	}
 	
+	/**
+	 * Simply send a single packet.
+	 * 
+	 * @param packet
+	 */
 	public void sendPacket(Packet packet) {
         if (packet != null) {
         	packetQueue.add(packet);
         }
     }
+	
+	/**
+	 * Send a packet to all connected players.
+	 * 
+	 * @param packet
+	 */
+	public void sendPacketToAll(Packet packet) {
+		for (Player player : GameServer.getInstance().getPlayers()) {
+			player.getNetworkManager().sendPacket(packet);
+		}
+	}
 
 	public Socket getSocket() {
 		return socket;
