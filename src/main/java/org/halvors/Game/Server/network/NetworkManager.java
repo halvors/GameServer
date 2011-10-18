@@ -11,7 +11,6 @@ import main.java.org.halvors.Game.Server.network.packet.Packet;
 public class NetworkManager {
 	private final Socket socket;
 	private final Queue<Packet> packetQueue = new LinkedList<Packet>();
-	private final LoginHandler loginHandler;
 	private final NetworkServerHandler networkServerHandler;
 	private final Thread readThread;
 	private final Thread writeThread;
@@ -53,10 +52,6 @@ public class NetworkManager {
 	
 	public Queue<Packet> getPacketQueue() {
 		return packetQueue;
-	}
-
-	public LoginHandler getLoginHandler() {
-		return loginHandler;
 	}
 	
 	public NetworkServerHandler getNetworkServerHandler() {

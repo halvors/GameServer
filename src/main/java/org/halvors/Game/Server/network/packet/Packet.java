@@ -48,7 +48,7 @@ public abstract class Packet {
 		return null;
 	}
 	
-    public void writePacket(Packet packet, DataOutputStream output){
+    public void writePacket(Packet packet, DataOutputStream output) throws IOException{
         output.write(packet.getPacketId());
         packet.writePacketData(output);
     }
@@ -69,7 +69,7 @@ public abstract class Packet {
 	public void handlePacket(Packet packet, NetworkManager networkManager) {
 		// First check if we need to handle the login.
 		if (packet instanceof PacketLogin) {
-			networkManager.getLoginHandler().handleLogin((PacketLogin) packet);
+//			networkManager.getLoginHandler().handleLogin((PacketLogin) packet);
 		} else {
 			// Then if login is done, we have a NetworkServerHandler.
 			NetworkServerHandler networkServerHandler = networkManager.getNetworkServerHandler();
