@@ -2,17 +2,24 @@ package org.halvors.Game.Server.entity;
 
 import java.util.UUID;
 
+import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.Location;
 import org.halvors.Game.Server.World;
 
 public class Entity {
+	private final GameServer server;
 	private final UUID id = UUID.randomUUID();
 	private World world;
 	private Location location;
 	
-	public Entity(Location location) {
-		setWorld(location.getWorld());
-		setLocation(location);
+	public Entity(GameServer server, Location location) {
+		this.server = server;
+		this.world = location.getWorld();
+		this.location = location;
+	}
+	
+	public GameServer getServer() {
+		return server;
 	}
 	
 	public UUID getId() {
@@ -23,15 +30,15 @@ public class Entity {
 		return world;
 	}
 	
-	public void setWorld(World world) {
-		this.world = world;
-	}
-	
 	public Location getLocation() {
 		return location;
 	}
 
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+	
+	public void remove() {
+		world.removeEntity(this);
 	}
 }

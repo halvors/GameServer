@@ -1,12 +1,13 @@
 package org.halvors.Game.Server.entity;
 
+import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.Location;
 
 public class LivingEntity extends Entity {
 	private int health;
 	
-	public LivingEntity(Location location) {
-		super(location);
+	public LivingEntity(GameServer server, Location location) {
+		super(server, location);
 	}
 
 	public int getHealth() {
@@ -25,5 +26,10 @@ public class LivingEntity extends Entity {
 		if (damage < 20) {
 			setHealth(damage);
 		}
+	}
+	
+	public void die() {
+		setHealth(0);
+		remove();
 	}
 }
