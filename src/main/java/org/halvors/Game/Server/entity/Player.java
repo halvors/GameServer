@@ -1,28 +1,29 @@
 package org.halvors.Game.Server.entity;
 
+import java.net.InetAddress;
+
 import org.halvors.Game.Server.network.NetworkManager;
+import org.halvors.Game.Server.network.NetworkServerHandler;
 import org.halvors.Game.Server.network.packet.PacketChat;
 
 public class Player {
 	private final String name;
-	private final NetworkManager networkManager;
+	private final NetworkServerHandler networkServerHandler;
 	
-	public Player(String name, NetworkManager networkManager) {
+	public Player(String name, NetworkManager networkManager, NetworkServerHandler networkServerHandler) {
 		this.name = name;
-		this.networkManager = networkManager;
-	}
-	
-	public void sendChatMessage(String message) {
-		if (message != null) {
-			networkManager.broadcastPacket(new PacketChat(message));
-		}
+		this.networkServerHandler = networkServerHandler;
 	}
 	
 	public String getName() {
 		return name;
 	}
+	
+	public InetAddress getInetAddress() {
+		return networkServerHandler.getNetworkManager().getSocket().getInetAddress();
+	}
 
-	public NetworkManager getNetworkManager() {
-		return networkManager;
+	public NetworkServerHandler getNetworkServerHandler() {
+		return networkServerHandler;
 	}
 }

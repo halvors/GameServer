@@ -17,19 +17,21 @@ public class NetworkWriterThread extends Thread {
 	
 	@Override
 	public void run() {
-		try {
-			DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-			Packet packet = null;
-			
-			while (socket.isConnected()) {
+		DataOutputStream output = null;
+		Packet packet = null;
+		
+		while (socket.isConnected()) {
+			try {
+				output = new DataOutputStream(socket.getOutputStream());
 				packet = networkManager.getPacketQueue().poll();
 				
 				if (packet != null && output != null) {
 					packet.writePacket(packet, output);
 				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 }

@@ -15,20 +15,22 @@ public class NetworkReaderThread extends Thread {
 		this.socket = networkManager.getSocket();
 	}
 	
+	@Override
 	public void run() {
-		try {
-			DataInputStream input = new DataInputStream(socket.getInputStream());
-			Packet packet = null;
-			
-			while (socket.isConnected()) {
+		DataInputStream input = null;
+		Packet packet = null;
+		
+		while (socket.isConnected()) {
+			try {
+				input = new DataInputStream(socket.getInputStream());
 				packet = Packet.readPacket(input);
-			
+				
 				if (packet != null && input != null) {
-					packet.handlePacket(packet, networkManager);
+					packet.handlePacket(packet, networkManager); // TODO: Fix this little issue.
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
+		}
 	}
 }

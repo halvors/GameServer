@@ -11,13 +11,11 @@ import org.halvors.Game.Server.network.packet.Packet;
 public class NetworkManager {
 	private final Socket socket;
 	private final Queue<Packet> packetQueue = new LinkedList<Packet>();
-	private final NetworkServerHandler networkServerHandler;
 	private final Thread readThread;
 	private final Thread writeThread;
 	
 	public NetworkManager(Socket socket) {
 		this.socket = socket;
-		this.networkServerHandler = new NetworkServerHandler(GameServer.getInstance(), this);
 		this.readThread = new NetworkReaderThread(this);
         this.writeThread = new NetworkWriterThread(this);
         readThread.start();
@@ -42,7 +40,7 @@ public class NetworkManager {
 	 */
 	public void broadcastPacket(Packet packet) {
 		for (Player player : GameServer.getInstance().getPlayers()) {
-			player.getNetworkManager().sendPacket(packet);
+			player.getNetworkServerHandler().getNetworkManager().sendPacket(packet);
 		}
 	}
 
@@ -52,9 +50,5 @@ public class NetworkManager {
 	
 	public Queue<Packet> getPacketQueue() {
 		return packetQueue;
-	}
-	
-	public NetworkServerHandler getNetworkServerHandler() {
-		return networkServerHandler;
 	}
 }
