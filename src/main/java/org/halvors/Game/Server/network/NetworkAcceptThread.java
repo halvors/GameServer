@@ -12,22 +12,20 @@ import org.halvors.Game.Server.network.packet.PacketLogin;
 
 public class NetworkAcceptThread extends Thread {
 	private final GameServer server;
-	private final LoginHandler loginHandler;
 	private final Queue<Socket> pendingConnections = new LinkedList<Socket>();
 	
-	public NetworkAcceptThread(GameServer server, LoginHandler loginHandler) {
+	public NetworkAcceptThread(GameServer server) {
 		this.server = server;
-		this.loginHandler = loginHandler;
 	}
-	//public boolean iswaiting = false;
+	
+	@Override
 	public void run() {
 		Socket socket = null;
 		DataInputStream input = null;
 		Packet packet = null;
+		LoginHandler loginHandler = null;
 		
 		while (true) {
-			System.out.println("________________________________________________________________________"+Integer.toString(pendingConnections.size()));
-			
 			if (!pendingConnections.isEmpty()) {
 				socket = pendingConnections.poll();
 				
@@ -40,12 +38,12 @@ public class NetworkAcceptThread extends Thread {
 				packet = Packet.readPacket(input);
 				
 				if (packet != null && packet instanceof PacketLogin) {
-					LoginHandler loginHandler = new LoginHandler(server);
+					loginHandler = new LoginHandler(server);
 					loginHandler.handleLogin((PacketLogin) packet);
 				}
 			} else {
 				try {	
-					Thread.sleep(1000l);	
+					Thread.sleep(1000L);	
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -65,9 +63,5 @@ public class NetworkAcceptThread extends Thread {
 		if (pendingConnections.contains(socket)) {
 			pendingConnections.remove(socket);
 		}
-	}
-	
-	public LoginHandler getLoginHandler() {
-		return loginHandler;
 	}
 }

@@ -15,6 +15,7 @@ public class NetworkWriterThread extends Thread {
 		this.socket = networkManager.getSocket();
 	}
 	
+	@Override
 	public void run() {
 		try {
 			DataOutputStream output = new DataOutputStream(socket.getOutputStream());

@@ -14,7 +14,7 @@ public class Player {
 	
 	public void sendChatMessage(String message) {
 		if (message != null) {
-			networkManager.sendPacketToAll(new PacketChat(message));
+			networkManager.broadcastPacket(new PacketChat(message));
 		}
 	}
 	

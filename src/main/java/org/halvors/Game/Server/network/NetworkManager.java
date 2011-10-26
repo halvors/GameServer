@@ -40,7 +40,7 @@ public class NetworkManager {
 	 * 
 	 * @param packet
 	 */
-	public void sendPacketToAll(Packet packet) {
+	public void broadcastPacket(Packet packet) {
 		for (Player player : GameServer.getInstance().getPlayers()) {
 			player.getNetworkManager().sendPacket(packet);
 		}

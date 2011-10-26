@@ -1,7 +1,6 @@
 package org.halvors.Game.Server.network;
 
 import org.halvors.Game.Server.GameServer;
-import org.halvors.Game.Server.entity.Player;
 import org.halvors.Game.Server.network.packet.PacketLogin;
 
 public class LoginHandler {
@@ -16,7 +15,11 @@ public class LoginHandler {
 		String version = packet.version;
 		
 		if (name != null && version != null) {
-			Player player = new Player(name, null); // TODO: Figure out how to do this with login and creation of player.
+			// TODO: Figure out how to do this with login and creation of player.
 		}
+	}
+
+	public GameServer getServer() {
+		return server;
 	}
 }
