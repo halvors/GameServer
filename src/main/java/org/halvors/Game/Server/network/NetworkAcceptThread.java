@@ -12,10 +12,12 @@ import org.halvors.Game.Server.network.packet.PacketLogin;
 
 public class NetworkAcceptThread extends Thread {
 	private final GameServer server;
+	private final NetworkListenThread networkListenThread;
 	private final Queue<Socket> pendingConnections = new LinkedList<Socket>();
 	
-	public NetworkAcceptThread(GameServer server) {
+	public NetworkAcceptThread(GameServer server, NetworkListenThread networkListenThread) {
 		this.server = server;
+		this.networkListenThread = networkListenThread;
 	}
 	
 	@Override
@@ -38,7 +40,7 @@ public class NetworkAcceptThread extends Thread {
 				packet = Packet.readPacket(input);
 				
 				if (packet != null && packet instanceof PacketLogin) {
-					loginHandler = new LoginHandler(server);
+					loginHandler = new LoginHandler(server, networkListenThread.addClient(socket));
 					loginHandler.handleLogin((PacketLogin) packet);
 				}
 			} else {
@@ -52,16 +54,20 @@ public class NetworkAcceptThread extends Thread {
 	}
 	
 	public void addToPendigConnections(Socket socket) {
-		// We don't wanna accept 2 of the same socket.
+		// We don't want to accept the socket twice.
 		if (!pendingConnections.contains(socket)) {
 			pendingConnections.add(socket);
 		}
 	}
 	
 	public void removeFromPendigConnections(Socket socket) {
-		// We only wanna remove socket that exist's.
+		// We only want to remove socket that exist's.
 		if (pendingConnections.contains(socket)) {
 			pendingConnections.remove(socket);
 		}
+	}
+
+	public NetworkListenThread getNetworkListenThread() {
+		return networkListenThread;
 	}
 }
