@@ -1,4 +1,4 @@
-package main.java.org.halvors.Game.Server;
+package org.halvors.Game.Server;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,8 +9,8 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import main.java.org.halvors.Game.Server.entity.Player;
-import main.java.org.halvors.Game.Server.network.NetworkListenThread;
+import org.halvors.Game.Server.entity.Player;
+import org.halvors.Game.Server.network.NetworkListenThread;
 
 public class GameServer {
 	private static GameServer instance;

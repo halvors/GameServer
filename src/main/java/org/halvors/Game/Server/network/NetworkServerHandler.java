@@ -1,9 +1,9 @@
-package main.java.org.halvors.Game.Server.network;
+package org.halvors.Game.Server.network;
 
-import main.java.org.halvors.Game.Server.GameServer;
-import main.java.org.halvors.Game.Server.network.packet.PacketChat;
-import main.java.org.halvors.Game.Server.network.packet.PacketDisconnect;
-import main.java.org.halvors.Game.Server.network.packet.PacketLogin;
+import org.halvors.Game.Server.GameServer;
+import org.halvors.Game.Server.network.packet.PacketChat;
+import org.halvors.Game.Server.network.packet.PacketDisconnect;
+import org.halvors.Game.Server.network.packet.PacketLogin;
 
 public class NetworkServerHandler {;
 	private final GameServer server;

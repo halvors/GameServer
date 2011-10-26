@@ -1,4 +1,4 @@
-package main.java.org.halvors.Game.Server.network;
+package org.halvors.Game.Server.network;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
-import main.java.org.halvors.Game.Server.GameServer;
+import org.halvors.Game.Server.GameServer;
 
 public class NetworkListenThread extends Thread {
 	private final GameServer server;

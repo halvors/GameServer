@@ -1,9 +1,9 @@
-package main.java.org.halvors.Game.Server.entity;
+package org.halvors.Game.Server.entity;
 
 import java.util.UUID;
 
-import main.java.org.halvors.Game.Server.Location;
-import main.java.org.halvors.Game.Server.World;
+import org.halvors.Game.Server.Location;
+import org.halvors.Game.Server.World;
 
 public class Entity {
 	private final UUID id = UUID.randomUUID();

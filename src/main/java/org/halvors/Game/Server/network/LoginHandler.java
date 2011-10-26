@@ -1,8 +1,8 @@
-package main.java.org.halvors.Game.Server.network;
+package org.halvors.Game.Server.network;
 
-import main.java.org.halvors.Game.Server.GameServer;
-import main.java.org.halvors.Game.Server.entity.Player;
-import main.java.org.halvors.Game.Server.network.packet.PacketLogin;
+import org.halvors.Game.Server.GameServer;
+import org.halvors.Game.Server.entity.Player;
+import org.halvors.Game.Server.network.packet.PacketLogin;
 
 public class LoginHandler {
 	private final GameServer server;

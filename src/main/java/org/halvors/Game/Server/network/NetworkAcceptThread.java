@@ -1,4 +1,4 @@
-package main.java.org.halvors.Game.Server.network;
+package org.halvors.Game.Server.network;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -6,9 +6,9 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import main.java.org.halvors.Game.Server.GameServer;
-import main.java.org.halvors.Game.Server.network.packet.Packet;
-import main.java.org.halvors.Game.Server.network.packet.PacketLogin;
+import org.halvors.Game.Server.GameServer;
+import org.halvors.Game.Server.network.packet.Packet;
+import org.halvors.Game.Server.network.packet.PacketLogin;
 
 public class NetworkAcceptThread extends Thread {
 	private final GameServer server;

@@ -1,6 +1,6 @@
-package main.java.org.halvors.Game.Server.entity;
+package org.halvors.Game.Server.entity;
 
-import main.java.org.halvors.Game.Server.Location;
+import org.halvors.Game.Server.Location;
 
 public class LivingEntity extends Entity {
 	private int health;

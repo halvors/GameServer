@@ -1,7 +1,7 @@
-package main.java.org.halvors.Game.Server.entity;
+package org.halvors.Game.Server.entity;
 
-import main.java.org.halvors.Game.Server.network.NetworkManager;
-import main.java.org.halvors.Game.Server.network.packet.PacketChat;
+import org.halvors.Game.Server.network.NetworkManager;
+import org.halvors.Game.Server.network.packet.PacketChat;
 
 public class Player {
 	private final String name;
