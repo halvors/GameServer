@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.network.NetworkManager;
 import org.halvors.Game.Server.network.NetworkServerHandler;
+import org.halvors.Game.Server.network.packet.PacketChat;
 
 public class Player extends LivingEntity {
 	private final GameServer server;
@@ -26,7 +27,7 @@ public class Player extends LivingEntity {
 	}
 	
 	public void sendMessage(String message) {
-
+		networkManager.sendPacket(new PacketChat(message));
 	}
 	
 	public void kick(String reason) {
