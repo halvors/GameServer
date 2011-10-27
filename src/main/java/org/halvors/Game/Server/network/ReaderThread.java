@@ -6,11 +6,11 @@ import java.net.Socket;
 
 import org.halvors.Game.Server.network.packet.Packet;
 
-public class NetworkReaderThread extends Thread {
+public class ReaderThread extends Thread {
 	private final NetworkManager networkManager;
 	private final Socket socket;
 	
-	public NetworkReaderThread(NetworkManager networkManager) {
+	public ReaderThread(NetworkManager networkManager) {
 		this.networkManager = networkManager;
 		this.socket = networkManager.getSocket();
 	}

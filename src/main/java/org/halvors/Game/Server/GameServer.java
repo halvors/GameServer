@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.halvors.Game.Server.entity.Player;
-import org.halvors.Game.Server.network.NetworkListenThread;
+import org.halvors.Game.Server.network.ListenThread;
 
 public class GameServer {
 	private static GameServer instance;
@@ -40,7 +40,7 @@ public class GameServer {
 		// Check if host is greater than 0.
 		if (host.length() > 0 && port > 0) {
 			try {
-				thread = new NetworkListenThread(this, InetAddress.getByName(host), port);
+				thread = new ListenThread(this, InetAddress.getByName(host), port);
 				thread.start();
 				log(Level.INFO, "Server is running on: " + host + ":" + Integer.toString(port));
 			} catch (IOException e) {
@@ -147,9 +147,9 @@ public class GameServer {
 		return configuration;
 	}
 	
-	public NetworkListenThread getNetworkListenThread() {
-		if (thread instanceof NetworkListenThread) {
-			return (NetworkListenThread) thread;
+	public ListenThread getNetworkListenThread() {
+		if (thread instanceof ListenThread) {
+			return (ListenThread) thread;
 		}
 		
 		return null;

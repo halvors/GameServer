@@ -1,11 +1,15 @@
 package org.halvors.Game.Server.network;
 
+import java.net.Socket;
+
 import org.halvors.Game.Server.GameServer;
+import org.halvors.Game.Server.entity.Player;
 import org.halvors.Game.Server.network.packet.PacketLogin;
 
 public class LoginHandler {
 	private final GameServer server;
 	private final NetworkManager networkManager;
+	
 	private NetworkServerHandler networkServerHandler;
 	
 	public LoginHandler(GameServer server, NetworkManager networkManager) {
@@ -18,7 +22,7 @@ public class LoginHandler {
 		String version = packet.version;
 		
 		if (name != null && version != null) {
-			// TODO: Figure out how to do this with login and creation of player.
+			// TODO: Load player here.
 			networkServerHandler = new NetworkServerHandler(server, networkManager);
 		}
 	}

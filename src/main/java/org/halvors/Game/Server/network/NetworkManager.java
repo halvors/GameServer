@@ -9,15 +9,17 @@ import org.halvors.Game.Server.entity.Player;
 import org.halvors.Game.Server.network.packet.Packet;
 
 public class NetworkManager {
+	private final GameServer server;
 	private final Socket socket;
 	private final Queue<Packet> packetQueue = new LinkedList<Packet>();
 	private final Thread readThread;
 	private final Thread writeThread;
 	
-	public NetworkManager(Socket socket) {
+	public NetworkManager(GameServer server, Socket socket) {
+		this.server = server;
 		this.socket = socket;
-		this.readThread = new NetworkReaderThread(this);
-        this.writeThread = new NetworkWriterThread(this);
+		this.readThread = new ReaderThread(this);
+        this.writeThread = new WriterThread(this);
         readThread.start();
         writeThread.start();
 	}
@@ -50,5 +52,9 @@ public class NetworkManager {
 	
 	public Queue<Packet> getPacketQueue() {
 		return packetQueue;
+	}
+
+	public GameServer getServer() {
+		return server;
 	}
 }

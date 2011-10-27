@@ -10,14 +10,14 @@ import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.network.packet.Packet;
 import org.halvors.Game.Server.network.packet.PacketLogin;
 
-public class NetworkAcceptThread extends Thread {
+public class AcceptThread extends Thread {
 	private final GameServer server;
-	private final NetworkListenThread networkListenThread;
+	private final ListenThread listenThread;
 	private final Queue<Socket> pendingConnections = new LinkedList<Socket>();
 	
-	public NetworkAcceptThread(GameServer server, NetworkListenThread networkListenThread) {
+	public AcceptThread(GameServer server, ListenThread listenThread) {
 		this.server = server;
-		this.networkListenThread = networkListenThread;
+		this.listenThread = listenThread;
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class NetworkAcceptThread extends Thread {
 				packet = Packet.readPacket(input);
 				
 				if (packet != null && packet instanceof PacketLogin) {
-					loginHandler = new LoginHandler(server, networkListenThread.addClient(socket));
+					loginHandler = new LoginHandler(server, listenThread.addClient(socket));
 					loginHandler.handleLogin((PacketLogin) packet);
 				}
 			} else {
@@ -67,7 +67,7 @@ public class NetworkAcceptThread extends Thread {
 		}
 	}
 
-	public NetworkListenThread getNetworkListenThread() {
-		return networkListenThread;
+	public ListenThread getListenThread() {
+		return listenThread;
 	}
 }

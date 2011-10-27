@@ -11,12 +11,12 @@ public class NetworkServerHandler {;
 	private final NetworkManager networkManager;
 	private final Player player;
 	
-	public NetworkServerHandler(GameServer server, NetworkManager networkManager) {
+	public NetworkServerHandler(GameServer server, NetworkManager networkManager, Player player) {
 		this.server = server;
 		this.networkManager = networkManager;
-		this.player = new Player("TestPlayer", networkManager, this);
+		this.player = player;
 	}
-	
+
 	public void handlePacketLogin(PacketLogin packet) {
 		System.out.println("Player joined the game.");
 	}

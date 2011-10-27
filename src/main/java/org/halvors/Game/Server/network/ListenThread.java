@@ -11,18 +11,18 @@ import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
 
-public class NetworkListenThread extends Thread {
+public class ListenThread extends Thread {
 	private final GameServer server;
 	private final ServerSocket serverSocket;
-	private final NetworkAcceptThread networkAcceptThread;
+	private final AcceptThread networkAcceptThread;
 	private final List<NetworkManager> clients = Collections.synchronizedList(new ArrayList<NetworkManager>());
 	
-	public NetworkListenThread(GameServer server, InetAddress address, int port) throws IOException {
+	public ListenThread(GameServer server, InetAddress address, int port) throws IOException {
 		this.server = server;
 		this.serverSocket = new ServerSocket(port, 0, address);
 		
 		// Accept connections and logins here before we register a new NetworkManager.
-		this.networkAcceptThread = new NetworkAcceptThread(server, this);
+		this.networkAcceptThread = new AcceptThread(server, this);
 		networkAcceptThread.start();
 	}
 	
@@ -78,7 +78,7 @@ public class NetworkListenThread extends Thread {
 	public NetworkManager addClient(Socket socket) {
 		if (!clients.contains(socket)) {
 			// Create a new NetworkManager and add it to the clients list.
-			NetworkManager networkManager = new NetworkManager(socket);
+			NetworkManager networkManager = new NetworkManager(server, socket);
 			clients.add(networkManager);
 			
 			return networkManager;
