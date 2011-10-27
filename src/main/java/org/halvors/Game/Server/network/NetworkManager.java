@@ -7,6 +7,7 @@ import java.util.Queue;
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.entity.Player;
 import org.halvors.Game.Server.network.packet.Packet;
+import org.halvors.Game.Server.network.packet.PacketDisconnect;
 
 public class NetworkManager {
 	private final GameServer server;
@@ -46,6 +47,10 @@ public class NetworkManager {
 		for (Player player : GameServer.getInstance().getPlayers()) {
 			player.getNetworkServerHandler().getNetworkManager().sendPacket(packet);
 		}
+	}
+	
+	public void disconnect(String reason) {
+		sendPacket(new PacketDisconnect(reason));
 	}
 
 	public Socket getSocket() {

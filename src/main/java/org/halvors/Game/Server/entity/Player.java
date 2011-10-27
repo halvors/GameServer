@@ -20,13 +20,17 @@ public class Player extends LivingEntity {
 		setNetworkServerHandler(networkServerHandler);
 		setNetworkManager(networkServerHandler.getNetworkManager());
 	}
-
+	
 	public String getName() {
 		return name;
 	}
 	
 	public void sendMessage(String message) {
 
+	}
+	
+	public void kick(String reason) {
+		networkManager.disconnect(reason);
 	}
 
 	public NetworkManager getNetworkManager() {

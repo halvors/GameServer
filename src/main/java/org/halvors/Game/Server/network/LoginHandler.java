@@ -45,7 +45,7 @@ public class LoginHandler {
 	}
 	
 	public void disconnect(String reason) {
-		networkManager.sendPacket(new PacketDisconnect("Disconnected"));
+		networkManager.disconnect(reason);
 	}
 	
 	public void handleLogin(PacketLogin packet) {
