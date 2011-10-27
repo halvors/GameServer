@@ -17,7 +17,8 @@ public class ListenThread extends Thread {
 	private final AcceptThread networkAcceptThread;
 	private final List<NetworkManager> clients = Collections.synchronizedList(new ArrayList<NetworkManager>());
 	
-	public ListenThread(GameServer server, InetAddress address, int port) throws IOException {
+	public ListenThread(String name, GameServer server, InetAddress address, int port) throws IOException {
+		super(name);
 		this.server = server;
 		this.serverSocket = new ServerSocket(port, 0, address);
 		

@@ -1,5 +1,6 @@
 package org.halvors.Game.Server.network;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -17,12 +18,16 @@ public class NetworkManager {
 	private final Thread readThread;
 	private final Thread writeThread;
 	
-	public NetworkManager(GameServer server, Socket socket, LoginHandler loginHandler, String name) {
+	private boolean isRunning = true;
+	
+	public NetworkManager(GameServer server, Socket socket, LoginHandler loginHandler, String name) throws IOException {
 		this.server = server;
 		this.socket = socket;
+		socket.setSoTimeout(30000);
+        socket.setTrafficClass(24); // TODO: Check this?
 		this.loginHandler = loginHandler;
-		this.readThread = new ReaderThread(name + " Reader thread", this);
-        this.writeThread = new WriterThread(name + " Writer thread", this);
+		this.readThread = new ReaderThread(name + ": Reader thread", this);
+        this.writeThread = new WriterThread(name + ": Writer thread", this);
         readThread.start();
         writeThread.start();
 	}
@@ -51,6 +56,12 @@ public class NetworkManager {
 	
 	public void disconnect(String reason) {
 		sendPacket(new PacketDisconnect(reason));
+		wakeThreads();
+	}
+	
+	public void wakeThreads() {
+		readThread.interrupt();
+		writeThread.interrupt();
 	}
 
 	public Socket getSocket() {
@@ -71,5 +82,13 @@ public class NetworkManager {
 	
 	public Queue<Packet> getPacketQueue() {
 		return packetQueue;
+	}
+	
+	public boolean isRunning() {
+		return isRunning;
+	}
+
+	public void setRunning(boolean isRunning) {
+		this.isRunning = isRunning;
 	}
 }

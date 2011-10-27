@@ -1,11 +1,11 @@
 package org.halvors.Game.Server.network;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.entity.Player;
-import org.halvors.Game.Server.network.packet.PacketDisconnect;
 import org.halvors.Game.Server.network.packet.PacketLogin;
 
 public class LoginHandler {
@@ -15,7 +15,7 @@ public class LoginHandler {
 	private Player player;
 	private NetworkServerHandler networkServerHandler;
 	
-	public LoginHandler(GameServer server, Socket socket) {
+	public LoginHandler(GameServer server, Socket socket) throws IOException {
 		this.server = server;
 		this.networkManager = new NetworkManager(server, socket, this, null); // TODO: Add socket id String argument.
 	}

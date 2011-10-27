@@ -19,20 +19,18 @@ public class GameServer {
 	private final String version = "0.0.1";
 	
 	private final Logger logger = Logger.getLogger("Game");
+	private final Configuration configuration;
 	private final List<World> worlds = new ArrayList<World>();
 	private final List<Player> players = new ArrayList<Player>();
 	
-	private Configuration configuration;
-	private Thread thread;
+	private ListenThread listenThread;
 	
 	public GameServer() {
 		GameServer.instance = this;
-	}
-	
-	public void main(String[] args) {
+
 		log(Level.INFO, "Starting " + getName() + "Server " + getVersion());
 		
-		// Loading configuration.
+		// Load configuration.
 		configuration = new Configuration(this, new File("server.properties"));
 		String host = configuration.getStringProperty("host", "0.0.0.0");
 		int port = configuration.getIntProperty("port", 7846);
@@ -40,8 +38,8 @@ public class GameServer {
 		// Check if host is greater than 0.
 		if (host.length() > 0 && port > 0) {
 			try {
-				thread = new ListenThread(this, InetAddress.getByName(host), port);
-				thread.start();
+				listenThread = new ListenThread("Listen thread", this, InetAddress.getByName(host), port);
+				listenThread.start();
 				log(Level.INFO, "Server is running on: " + host + ":" + Integer.toString(port));
 			} catch (IOException e) {
 				log(Level.WARNING, "Failed to bind to port: " + Integer.toString(port));
@@ -172,10 +170,6 @@ public class GameServer {
 	}
 	
 	public ListenThread getNetworkListenThread() {
-		if (thread instanceof ListenThread) {
-			return (ListenThread) thread;
-		}
-		
-		return null;
+		return listenThread;
 	}
 }

@@ -28,28 +28,28 @@ public class AcceptThread extends Thread {
 		Packet packet = null;
 		LoginHandler loginHandler = null;
 		
-		while (true) {
-			if (!pendingConnections.isEmpty()) {
-				socket = pendingConnections.poll();
-				
-				try {
+		while (true) { // TODO: Rewrite this?
+			try {
+				if (!pendingConnections.isEmpty()) {
+					socket = pendingConnections.poll();
 					input = new DataInputStream(socket.getInputStream());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+
+					packet = Packet.readPacket(input);
 				
-				packet = Packet.readPacket(input);
-				
-				if (packet != null && packet instanceof PacketLogin) {
-					loginHandler = new LoginHandler(server, socket);
-					loginHandler.handleLogin((PacketLogin) packet);
+					if (packet != null && packet instanceof PacketLogin) {
+						loginHandler = new LoginHandler(server, socket);
+						loginHandler.handleLogin((PacketLogin) packet);
+					}
+				} else {
+//					try {	
+//						Thread.sleep(1000L);	
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
 				}
-			} else {
-				try {	
-					Thread.sleep(1000L);	
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 package org.halvors.Game.Server.entity;
 
-import java.net.InetAddress;
+import java.net.SocketAddress;
 
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.network.NetworkManager;
@@ -46,8 +46,8 @@ public class Player extends LivingEntity {
 		this.networkServerHandler = networkServerHandler;
 	}
 	
-	public InetAddress getInetAddress() {
-		return networkServerHandler.getNetworkManager().getSocket().getInetAddress();
+	public SocketAddress getSocketAddress() {
+		return networkServerHandler.getNetworkManager().getSocket().getRemoteSocketAddress();
 	}
 
 	public void setNetworkManager(NetworkManager networkManager) {
