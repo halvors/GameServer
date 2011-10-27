@@ -24,7 +24,12 @@ public class LoginHandler {
 		if (name != null && version != null) {
 			// TODO: Load player here.
 			Player player = new Player(name);
+			
+			// Create the NetworkServerHandler.
 			networkServerHandler = new NetworkServerHandler(server, networkManager, player);
+			
+			// Send reply to the client.
+			networkManager.sendPacket(new PacketLogin(name, version));
 		}
 	}
 
