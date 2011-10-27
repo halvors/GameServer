@@ -66,15 +66,11 @@ public abstract class Packet {
 		return packetClassToIdMap.get(getClass());
 	}
 	
-	public void handlePacket(Packet packet, NetworkManager networkManager) {
-		NetworkServerHandler networkServerHandler = networkManager.getNetworkServerHandler();
-		
-		if (networkServerHandler != null) {
-			if (packet instanceof PacketChat) {
-				networkServerHandler.handlePacketChat((PacketChat) packet);
-			} else if (packet instanceof PacketDisconnect) {
-				networkServerHandler.handlePacketDisconnect((PacketDisconnect) packet);
-			}
+	public void handlePacket(Packet packet, NetworkServerHandler networkServerHandler) {
+		if (packet instanceof PacketChat) {
+			networkServerHandler.handlePacketChat((PacketChat) packet);
+		} else if (packet instanceof PacketDisconnect) {
+			networkServerHandler.handlePacketDisconnect((PacketDisconnect) packet);
 		}
 	}
     

@@ -10,7 +10,8 @@ public class ReaderThread extends Thread {
 	private final NetworkManager networkManager;
 	private final Socket socket;
 	
-	public ReaderThread(NetworkManager networkManager) {
+	public ReaderThread(String name, NetworkManager networkManager) {
+		super(name);
 		this.networkManager = networkManager;
 		this.socket = networkManager.getSocket();
 	}
@@ -26,7 +27,7 @@ public class ReaderThread extends Thread {
 				packet = Packet.readPacket(input);
 				
 				if (packet != null && input != null) {
-					packet.handlePacket(packet, networkManager); // TODO: Fix this little issue.
+					packet.handlePacket(packet, networkManager.getNetworkServerHandler()); // TODO: Fix this little issue.
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

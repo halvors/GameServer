@@ -28,4 +28,12 @@ public class PacketDisconnect extends Packet {
 	public int getPacketSize() {
 		return reason.length();
 	}
+	
+	public String getReason() {
+		return reason;
+	}
+	
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 }

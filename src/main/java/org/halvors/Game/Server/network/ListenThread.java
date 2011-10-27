@@ -22,7 +22,7 @@ public class ListenThread extends Thread {
 		this.serverSocket = new ServerSocket(port, 0, address);
 		
 		// Accept connections and logins here before we register a new NetworkManager.
-		this.networkAcceptThread = new AcceptThread(server, this);
+		this.networkAcceptThread = new AcceptThread("Accept thread", server, this);
 		networkAcceptThread.start();
 	}
 	
@@ -53,9 +53,9 @@ public class ListenThread extends Thread {
 		return clients;
 	}
 	
-	public NetworkManager getClient(Socket socket) {
+	public NetworkManager getClient(NetworkManager networkManager) {
 		for (NetworkManager n : clients) {
-			if (n.getSocket().equals(socket)) {
+			if (networkManager.equals(networkManager)) {
 				return n;
 			}
 		}
@@ -63,22 +63,9 @@ public class ListenThread extends Thread {
 		return null;
 	}
 	
-	public boolean hasClient(Socket socket) {
-		for (NetworkManager n : clients) {
-			Socket s = n.getSocket();
-			
-			if (socket.getInetAddress() == s.getInetAddress() && socket.getPort() == s.getPort()) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	public NetworkManager addClient(Socket socket) {
-		if (!clients.contains(socket)) {
+	public NetworkManager addClient(NetworkManager networkManager) {
+		if (!clients.contains(networkManager)) {
 			// Create a new NetworkManager and add it to the clients list.
-			NetworkManager networkManager = new NetworkManager(server, socket);
 			clients.add(networkManager);
 			
 			return networkManager;

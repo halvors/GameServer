@@ -11,15 +11,17 @@ import org.halvors.Game.Server.network.packet.Packet;
 public class NetworkManager {
 	private final GameServer server;
 	private final Socket socket;
+	private final LoginHandler loginHandler;
 	private final Queue<Packet> packetQueue = new LinkedList<Packet>();
 	private final Thread readThread;
 	private final Thread writeThread;
 	
-	public NetworkManager(GameServer server, Socket socket) {
+	public NetworkManager(GameServer server, Socket socket, LoginHandler loginHandler, String name) {
 		this.server = server;
 		this.socket = socket;
-		this.readThread = new ReaderThread(this);
-        this.writeThread = new WriterThread(this);
+		this.loginHandler = loginHandler;
+		this.readThread = new ReaderThread(name + " Reader thread", this);
+        this.writeThread = new WriterThread(name + " Writer thread", this);
         readThread.start();
         writeThread.start();
 	}
@@ -49,12 +51,20 @@ public class NetworkManager {
 	public Socket getSocket() {
 		return socket;
 	}
-	
-	public Queue<Packet> getPacketQueue() {
-		return packetQueue;
-	}
 
 	public GameServer getServer() {
 		return server;
+	}
+
+	public LoginHandler getLoginHandler() {
+		return loginHandler;
+	}
+	
+	public NetworkServerHandler getNetworkServerHandler() {
+		return loginHandler.getNetworkServerHandler();
+	}
+	
+	public Queue<Packet> getPacketQueue() {
+		return packetQueue;
 	}
 }

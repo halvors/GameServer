@@ -12,18 +12,19 @@ public class LoginHandler {
 	
 	private NetworkServerHandler networkServerHandler;
 	
-	public LoginHandler(GameServer server, NetworkManager networkManager) {
+	public LoginHandler(GameServer server, Socket socket) {
 		this.server = server;
-		this.networkManager = networkManager;
+		this.networkManager = new NetworkManager(server, socket, this, null); // TODO: Add socket id String argument.
 	}
 	
 	public void handleLogin(PacketLogin packet) {
-		String name = packet.username;
-		String version = packet.version;
+		String name = packet.getUsername();
+		String version = packet.getVersion();
 		
 		if (name != null && version != null) {
 			// TODO: Load player here.
-			networkServerHandler = new NetworkServerHandler(server, networkManager);
+			Player player = new Player(name);
+			networkServerHandler = new NetworkServerHandler(server, networkManager, player);
 		}
 	}
 

@@ -10,7 +10,8 @@ public class WriterThread extends Thread {
 	private final NetworkManager networkManager;
 	private final Socket socket;
 	
-	public WriterThread(NetworkManager networkManager) {
+	public WriterThread(String name, NetworkManager networkManager) {
+		super(name);
 		this.networkManager = networkManager;
 		this.socket = networkManager.getSocket();
 	}

@@ -15,7 +15,8 @@ public class AcceptThread extends Thread {
 	private final ListenThread listenThread;
 	private final Queue<Socket> pendingConnections = new LinkedList<Socket>();
 	
-	public AcceptThread(GameServer server, ListenThread listenThread) {
+	public AcceptThread(String name, GameServer server, ListenThread listenThread) {
+		super(name);
 		this.server = server;
 		this.listenThread = listenThread;
 	}
@@ -40,7 +41,7 @@ public class AcceptThread extends Thread {
 				packet = Packet.readPacket(input);
 				
 				if (packet != null && packet instanceof PacketLogin) {
-					loginHandler = new LoginHandler(server, listenThread.addClient(socket));
+					loginHandler = new LoginHandler(server, socket);
 					loginHandler.handleLogin((PacketLogin) packet);
 				}
 			} else {
