@@ -9,13 +9,13 @@ import org.halvors.Game.Server.World;
 public class Entity {
 	private final GameServer server;
 	private final UUID id = UUID.randomUUID();
-	private World world;
-	private Location location;
+//	private World world;
+//	private Location location;
 	
-	public Entity(GameServer server, Location location) {
+	public Entity(GameServer server) {
 		this.server = server;
-		this.world = location.getWorld();
-		this.location = location;
+//		this.world = location.getWorld();
+//		this.location = location;
 	}
 	
 	public GameServer getServer() {
@@ -26,19 +26,19 @@ public class Entity {
 		return id;
 	}
 	
-	public World getWorld() {
-		return world;
-	}
-	
-	public Location getLocation() {
-		return location;
-	}
-
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-	
-	public void remove() {
-		world.removeEntity(this);
-	}
+//	public World getWorld() {
+//		return world;
+//	}
+//	
+//	public Location getLocation() {
+//		return location;
+//	}
+//
+//	public void setLocation(Location location) {
+//		this.location = location;
+//	}
+//	
+//	public void remove() {
+//		world.removeEntity(this);
+//	}
 }

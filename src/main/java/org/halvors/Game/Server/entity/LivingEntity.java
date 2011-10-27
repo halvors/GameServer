@@ -6,8 +6,8 @@ import org.halvors.Game.Server.Location;
 public class LivingEntity extends Entity {
 	private int health;
 	
-	public LivingEntity(GameServer server, Location location) {
-		super(server, location);
+	public LivingEntity(GameServer server) {
+		super(server);
 	}
 
 	public int getHealth() {
@@ -28,8 +28,8 @@ public class LivingEntity extends Entity {
 		}
 	}
 	
-	public void die() {
-		setHealth(0);
-		remove();
-	}
+//	public void die() {
+//		setHealth(0);
+//		remove();
+//	}
 }

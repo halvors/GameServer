@@ -131,15 +131,39 @@ public class GameServer {
 		return null;
 	}
 	
-	public void addPlayer(Player player) {
+	public Player getPlayer(UUID id) {
+		for (Player player : players) {
+			if (id.equals(player.getId())) {
+				return player;
+			}
+		}
+		
+		return null;
+	}
+	
+	public Player addPlayer(Player player) {
 		if (player != null && !players.contains(player)) {
 			players.add(player);
+			
+			return player;
 		}
+		
+		return null;
+	}
+	
+	public Player addPlayer(String name) {
+		return addPlayer(new Player(this, name));
 	}
 	
 	public void removePlayer(Player player) {
 		if (players.contains(player)) {
 			players.remove(player);
+		}
+	}
+	
+	public void broadcast(String message) {
+		for (Player p : players) {
+			p.sendMessage(message);
 		}
 	}
 
