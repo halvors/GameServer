@@ -12,14 +12,11 @@ public class Player extends LivingEntity {
 	private final String name;
 	
 	private NetworkServerHandler networkServerHandler;
-	private NetworkManager networkManager;
 	
 	public Player(GameServer server, String name) {
 		super(server);
 		this.server = server;
 		this.name = name;
-		setNetworkServerHandler(networkServerHandler);
-		setNetworkManager(networkServerHandler.getNetworkManager());
 	}
 	
 	public String getName() {
@@ -27,15 +24,15 @@ public class Player extends LivingEntity {
 	}
 	
 	public void sendMessage(String message) {
-		networkManager.sendPacket(new PacketChat(message));
+		getNetworkManager().sendPacket(new PacketChat(message));
 	}
 	
 	public void kick(String reason) {
-		networkManager.disconnect(reason);
+		getNetworkManager().disconnect(reason);
 	}
 
 	public NetworkManager getNetworkManager() {
-		return networkManager;
+		return networkServerHandler.getNetworkManager();
 	}
 	
 	public NetworkServerHandler getNetworkServerHandler() {
@@ -47,11 +44,7 @@ public class Player extends LivingEntity {
 	}
 	
 	public SocketAddress getSocketAddress() {
-		return networkServerHandler.getNetworkManager().getSocket().getRemoteSocketAddress();
-	}
-
-	public void setNetworkManager(NetworkManager networkManager) {
-		this.networkManager = networkManager;
+		return getNetworkManager().getSocket().getRemoteSocketAddress();
 	}
 
 	public GameServer getServer() {

@@ -21,28 +21,27 @@ public abstract class Packet {
         addIdClassMapping(255, PacketDisconnect.class);
     }
     
-	public static Packet readPacket(DataInputStream input) {
-		try {
-			// Read the id form the DataInputStream.
-            int id = input.read();
+	public static Packet readPacket(DataInputStream input) throws IOException {
+		if (input == null) {
+			throw new IOException("Input is  null"); // TODO: Remove this?
+		}
+			
+		// Read the id form the DataInputStream.
+        int id = input.read();
             
-            // Packet's in out system can't be less than 0.
-            if (id >= 0) {
-            	Packet packet = getNewPacket(id);
+        // Packet's in out system can't be less than 0.
+        if (id >= 0) {
+            Packet packet = getNewPacket(id);
             	
-            	// Check if the packet was found in the HashMap, if not throw an Exception.
-            	if (packet == null) {
-            		throw new IOException("Bad packet id " + id);
-            	}
-            	
-            	// Read the packet data.
-            	packet.readPacketData(input);
-            
-            	return packet;
+            // Check if the packet was found in the HashMap, if not throw an Exception.
+            if (packet == null) {
+            	throw new IOException("Bad packet id " + id);
             }
-        } catch(IOException e) {
-            System.out.println("Reached end of stream.");
-            e.printStackTrace();
+            
+            // Read the packet data.
+            packet.readPacketData(input);
+            
+            return packet;
         }
 		
 		return null;

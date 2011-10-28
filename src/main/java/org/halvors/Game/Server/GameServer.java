@@ -24,6 +24,7 @@ public class GameServer {
 	private final List<Player> players = new ArrayList<Player>();
 	
 	private ListenThread listenThread;
+	private boolean isRunning = true;
 	
 	public GameServer() {
 		GameServer.instance = this;
@@ -172,4 +173,12 @@ public class GameServer {
 	public ListenThread getNetworkListenThread() {
 		return listenThread;
 	}
+
+	public boolean isRunning() {
+		return isRunning;
+	}
+
+//	public void setRunning(boolean isRunning) {
+//		this.isRunning = isRunning;
+//	}
 }

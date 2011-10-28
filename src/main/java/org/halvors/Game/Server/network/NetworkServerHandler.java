@@ -27,17 +27,17 @@ public class NetworkServerHandler {;
 	}
 	
 	public void handleLogin(PacketLogin packet) {
-		// Not used.
+		// Not used, this is handled by LoginHandler.
 	}
 	
 	public void handlePacketChat(PacketChat packet) {
-		String message = ChatColor.YELLOW + player.getName() + ": " + packet.getMessage();
+		String message = player.getName() + ": " + packet.getMessage();
 		
 		// Print the message to the console.
 		server.log(Level.INFO, message);
 		
 		// Send the message to all the other players.
-		networkManager.broadcastPacket(new PacketChat(message));
+		server.broadcast(message);
 	}
 	
 	public void handlePacketDisconnect(PacketDisconnect packet) {
@@ -47,7 +47,7 @@ public class NetworkServerHandler {;
 		server.log(Level.INFO, message);
 			
 		// Send the message to all the other players.
-		networkManager.broadcastPacket(new PacketChat(message));
+		server.broadcast(message);
 	}
 
 	public NetworkManager getNetworkManager() {

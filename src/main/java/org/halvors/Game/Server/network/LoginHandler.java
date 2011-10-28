@@ -34,12 +34,9 @@ public class LoginHandler {
 			// Send reply to the client.
 			networkManager.sendPacket(new PacketLogin(name, version));
 			
-			String message = name + " joined the game.";	
-			
-			// Print the message to the console.
+			// Send login message.
+			String message = name + " joined the game.";
 			server.log(Level.INFO, message);
-			
-			// Send the message to all the other players.
 			server.broadcast(message);
 		}
 	}
@@ -65,6 +62,8 @@ public class LoginHandler {
 		
 		// Version is ok, then login.
 		login(packet);
+		
+		server.log(Level.INFO, "Test");
 	}
 
 	public GameServer getServer() {

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.network.packet.Packet;
@@ -28,28 +29,27 @@ public class AcceptThread extends Thread {
 		Packet packet = null;
 		LoginHandler loginHandler = null;
 		
-		while (true) { // TODO: Rewrite this?
-			try {
-				if (!pendingConnections.isEmpty()) {
+		while (server.isRunning()) { // TODO: Rewrite this?
+			if (!pendingConnections.isEmpty()) {
+				try {
 					socket = pendingConnections.poll();
 					input = new DataInputStream(socket.getInputStream());
-
+				
 					packet = Packet.readPacket(input);
 				
 					if (packet != null && packet instanceof PacketLogin) {
 						loginHandler = new LoginHandler(server, socket);
 						loginHandler.handleLogin((PacketLogin) packet);
 					}
-				} else {
-//					try {	
-//						Thread.sleep(1000L);	
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} else {
+				try {
+					Thread.sleep(1000L);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
