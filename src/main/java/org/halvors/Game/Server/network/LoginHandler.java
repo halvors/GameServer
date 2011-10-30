@@ -6,6 +6,7 @@ import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.entity.Player;
+import org.halvors.Game.Server.network.packet.PacketDisconnect;
 import org.halvors.Game.Server.network.packet.PacketLogin;
 
 public class LoginHandler {
@@ -28,21 +29,27 @@ public class LoginHandler {
 			// TODO: Load player here.
 			player = server.addPlayer(name);
 			
-			// Create the NetworkServerHandler.
+			// Create the ServerHandler.
 			serverHandler = new ServerHandler(server, networkManager, player);
 			
 			// Send reply to the client.
 			networkManager.sendPacket(new PacketLogin(name, version));
 			
+			// Inform server console.
+			server.log(Level.INFO, name + " logged in with id: " + player.getId());
+			
 			// Send login message.
 			String message = name + " joined the game.";
-			server.log(Level.INFO, message);
 			server.broadcast(message);
 		}
 	}
 	
 	public void disconnect(String reason) {
-		networkManager.disconnect(reason);
+		String message =  player.getName() + " left the game.";
+		server.broadcast(message);
+		
+		networkManager.sendPacket(new PacketDisconnect(reason));
+		networkManager.wakeThreads();
 	}
 	
 	public void handleLogin(PacketLogin packet) {
