@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.network.packet.Packet;
@@ -42,6 +41,10 @@ public class AcceptThread extends Thread {
 						loginHandler.handleLogin((PacketLogin) packet);
 					}
 				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				}
 			} else {

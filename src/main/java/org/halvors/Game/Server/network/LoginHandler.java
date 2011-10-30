@@ -13,7 +13,7 @@ public class LoginHandler {
 	private final NetworkManager networkManager;
 	
 	private Player player;
-	private NetworkServerHandler networkServerHandler;
+	private ServerHandler serverHandler;
 	
 	public LoginHandler(GameServer server, Socket socket) throws IOException {
 		this.server = server;
@@ -29,7 +29,7 @@ public class LoginHandler {
 			player = server.addPlayer(name);
 			
 			// Create the NetworkServerHandler.
-			networkServerHandler = new NetworkServerHandler(server, networkManager, player);
+			serverHandler = new ServerHandler(server, networkManager, player);
 			
 			// Send reply to the client.
 			networkManager.sendPacket(new PacketLogin(name, version));
@@ -62,8 +62,6 @@ public class LoginHandler {
 		
 		// Version is ok, then login.
 		login(packet);
-		
-		server.log(Level.INFO, "Test");
 	}
 
 	public GameServer getServer() {
@@ -74,12 +72,8 @@ public class LoginHandler {
 		return networkManager;
 	}
 	
-	public NetworkServerHandler getNetworkServerHandler() {
-		return networkServerHandler;
-	}
-
-	public void setPlayer(Player player) {
-		this.player = player;
+	public ServerHandler getServerHandler() {
+		return serverHandler;
 	}
 
 	public Player getPlayer() {

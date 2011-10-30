@@ -76,8 +76,8 @@ public class NetworkManager {
 		return loginHandler;
 	}
 	
-	public NetworkServerHandler getNetworkServerHandler() {
-		return loginHandler.getNetworkServerHandler();
+	public ServerHandler getServerHandler() {
+		return loginHandler.getServerHandler();
 	}
 	
 	public Queue<Packet> getPacketQueue() {

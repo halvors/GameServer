@@ -3,35 +3,24 @@ package org.halvors.Game.Server.network.packet;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 
-import org.halvors.Game.Server.network.NetworkManager;
-import org.halvors.Game.Server.network.NetworkServerHandler;
+import org.halvors.Game.Server.network.ServerHandler;
 
 /**
  * Represents a base packet.
  */
 public abstract class Packet {
-	private static HashMap<Integer, Class<?>> packetIdToClassMap = new HashMap<Integer, Class<?>>();
-    private static HashMap<Class<?>, Integer> packetClassToIdMap = new HashMap<Class<?>, Integer>();
-    
-	static {
-        addIdClassMapping(1, PacketLogin.class);
-        addIdClassMapping(2, PacketChat.class);
-        addIdClassMapping(255, PacketDisconnect.class);
-    }
-    
-	public static Packet readPacket(DataInputStream input) throws IOException {
-		if (input == null) {
-			throw new IOException("Input is  null"); // TODO: Remove this?
-		}
-			
+	public Packet() {
+		
+	}
+	
+	public static Packet readPacket(DataInputStream input) throws IOException, InstantiationException, IllegalAccessException {
 		// Read the id form the DataInputStream.
         int id = input.read();
             
         // Packet's in out system can't be less than 0.
         if (id >= 0) {
-            Packet packet = getNewPacket(id);
+            Packet packet = getPacketInstance(id);
             	
             // Check if the packet was found in the HashMap, if not throw an Exception.
             if (packet == null) {
@@ -57,58 +46,53 @@ public abstract class Packet {
 	public abstract void writePacketData(DataOutputStream output) throws IOException;
 	
 	/**
-	 * Get the id for the current packet.
+	 * Get the PacketType.
 	 * 
-	 * @return the id.
+	 * @return the PacketType.
 	 */
-	public int getPacketId() {
-		return packetClassToIdMap.get(getClass());
+	public PacketType getPacketType() {
+		return PacketType.getPacketFromClass(getClass());
 	}
 	
-	public void handlePacket(Packet packet, NetworkServerHandler networkServerHandler) {
-		if (packet instanceof PacketChat) {
-			networkServerHandler.handlePacketChat((PacketChat) packet);
-		} else if (packet instanceof PacketDisconnect) {
-			networkServerHandler.handlePacketDisconnect((PacketDisconnect) packet);
-		}
+	/**
+	 * Get the packet id.
+	 * 
+	 * @return the packet id.
+	 */
+	public int getPacketId() {
+		return getPacketType().getPacketId();
 	}
-    
+	
 	/**
 	 * Get a new packet from a specific id.
 	 * 
 	 * @param id
 	 * @return the Packet.
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
 	 */
-	public static Packet getNewPacket(int id) {
-		try {
-			Class<?> clazz = packetIdToClassMap.get(id);
+	public static Packet getPacketInstance(int id) throws InstantiationException, IllegalAccessException {
+		Class<?> clazz = PacketType.getPacketFromId(id).getPacketClass();
 
-			if (clazz != null) {
-	          	return (Packet) clazz.newInstance();
-			}
-        } catch(Exception e) {
-        	e.printStackTrace();
-        }
+		if (clazz != null) {
+			return (Packet) clazz.newInstance();
+		}
 		
 		return null;
     }
 	
-	/**
-	 * Add a new class to the Class/Id map. This should not be done dynamiclly.
-	 * 
-	 * @param id
-	 * @param clazz
-	 */
-	public static void addIdClassMapping(int id, Class<?> clazz) {
-		if (packetIdToClassMap.containsKey(id)) {
-            throw new IllegalArgumentException("Duplicate packet id:" + id);
-        }
+	public void handlePacket(Packet packet, ServerHandler handler) {
+		PacketType type = packet.getPacketType();
 		
-        if (packetClassToIdMap.containsKey(clazz)) {
-            throw new IllegalArgumentException("Duplicate packet class:" + clazz);
-        }
-        
-        packetIdToClassMap.put(id, clazz);
-        packetClassToIdMap.put(clazz, id);
-    }
+		// Detect PacketType and handle it in the right way :D
+		switch (type) {
+		case PacketChat:
+			handler.handlePacketChat((PacketChat) packet);
+			break;
+
+        case PacketDisconnect:
+        	handler.handlePacketDisconnect((PacketDisconnect) packet);
+        	break;
+		}
+	}
 }

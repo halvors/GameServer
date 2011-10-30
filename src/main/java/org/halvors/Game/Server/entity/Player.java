@@ -4,14 +4,14 @@ import java.net.SocketAddress;
 
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.network.NetworkManager;
-import org.halvors.Game.Server.network.NetworkServerHandler;
+import org.halvors.Game.Server.network.ServerHandler;
 import org.halvors.Game.Server.network.packet.PacketChat;
 
 public class Player extends LivingEntity {
 	private final GameServer server;
 	private final String name;
 	
-	private NetworkServerHandler networkServerHandler;
+	private ServerHandler networkServerHandler;
 	
 	public Player(GameServer server, String name) {
 		super(server);
@@ -35,11 +35,11 @@ public class Player extends LivingEntity {
 		return networkServerHandler.getNetworkManager();
 	}
 	
-	public NetworkServerHandler getNetworkServerHandler() {
+	public ServerHandler getNetworkServerHandler() {
 		return networkServerHandler;
 	}
 
-	public void setNetworkServerHandler(NetworkServerHandler networkServerHandler) {
+	public void setNetworkServerHandler(ServerHandler networkServerHandler) {
 		this.networkServerHandler = networkServerHandler;
 	}
 	

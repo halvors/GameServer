@@ -5,6 +5,7 @@ public class Main {
 		try {
 			// Start the server instance.
 			GameServer server = new GameServer();
+			server.main(args);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

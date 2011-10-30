@@ -2,7 +2,6 @@ package org.halvors.Game.Server.network;
 
 import java.util.logging.Level;
 
-import org.halvors.Game.Server.ChatColor;
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.entity.Player;
 import org.halvors.Game.Server.network.packet.Packet;
@@ -10,12 +9,12 @@ import org.halvors.Game.Server.network.packet.PacketChat;
 import org.halvors.Game.Server.network.packet.PacketDisconnect;
 import org.halvors.Game.Server.network.packet.PacketLogin;
 
-public class NetworkServerHandler {;
+public class ServerHandler {;
 	private final GameServer server;
 	private final NetworkManager networkManager;
 	private final Player player;
 	
-	public NetworkServerHandler(GameServer server, NetworkManager networkManager, Player player) {
+	public ServerHandler(GameServer server, NetworkManager networkManager, Player player) {
 		this.server = server;
 		this.networkManager = networkManager;
 		this.player = player;

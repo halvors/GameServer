@@ -8,29 +8,36 @@ public enum PacketType {
 	PacketDisconnect(255, PacketDisconnect.class);
 
 	private final int id;
-	private final Class<? extends Packet> packetClass;
-	private static final HashMap<Integer, PacketType> lookupId = new HashMap<Integer, PacketType>();
+	private Class<? extends Packet> clazz;
 	
-	PacketType(final int type, final Class<? extends Packet> packetClass) {
-		this.id = type;
-		this.packetClass = packetClass;
+	private static final HashMap<Integer, PacketType> lookupId = new HashMap<Integer, PacketType>();
+	private static final HashMap<Class<?>, PacketType> lookupClass = new HashMap<Class<?>, PacketType>();
+	
+	PacketType(final int id, final Class<? extends Packet> clazz) {
+		this.id = id;
+		this.clazz = clazz;
 	}
 
-	public int getId() {
+	public int getPacketId() {
 		return id;
 	}
 
 	public Class<? extends Packet> getPacketClass() {
-		return packetClass;
+		return clazz;
 	}
-
+	
 	public static PacketType getPacketFromId(int id) {
 		return lookupId.get(id);
 	}
 
+	public static PacketType getPacketFromClass(Class<?> clazz) {
+		return lookupClass.get(clazz);
+	}
+
 	static {
 		for (PacketType packet : values()) {
-			lookupId.put(packet.getId(), packet);
+			lookupId.put(packet.getPacketId(), packet);
+			lookupClass.put(packet.getPacketClass(), packet);
 		}
 	}
 }

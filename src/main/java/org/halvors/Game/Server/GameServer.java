@@ -19,7 +19,7 @@ public class GameServer {
 	private final String version = "0.0.1";
 	
 	private final Logger logger = Logger.getLogger("Game");
-	private final Configuration configuration;
+	private final Configuration configuration = new Configuration(this, new File("server.properties"));
 	private final List<World> worlds = new ArrayList<World>();
 	private final List<Player> players = new ArrayList<Player>();
 	
@@ -28,11 +28,12 @@ public class GameServer {
 	
 	public GameServer() {
 		GameServer.instance = this;
-
+	}
+	
+	public void main(String[] args) {
 		log(Level.INFO, "Starting " + getName() + "Server " + getVersion());
 		
 		// Load configuration.
-		configuration = new Configuration(this, new File("server.properties"));
 		String host = configuration.getStringProperty("host", "0.0.0.0");
 		int port = configuration.getIntProperty("port", 7846);
 		

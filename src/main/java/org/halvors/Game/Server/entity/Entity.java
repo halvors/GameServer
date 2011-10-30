@@ -3,8 +3,6 @@ package org.halvors.Game.Server.entity;
 import java.util.UUID;
 
 import org.halvors.Game.Server.GameServer;
-import org.halvors.Game.Server.Location;
-import org.halvors.Game.Server.World;
 
 public class Entity {
 	private final GameServer server;

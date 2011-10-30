@@ -27,9 +27,13 @@ public class ReaderThread extends Thread {
 				packet = Packet.readPacket(input);
 				
 				if (packet != null && input != null) {
-					packet.handlePacket(packet, networkManager.getNetworkServerHandler()); // TODO: Fix this little issue.
+					packet.handlePacket(packet, networkManager.getServerHandler());
 				}
 			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
 		}
