@@ -9,6 +9,7 @@ import java.util.Queue;
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.network.packet.Packet;
 import org.halvors.Game.Server.network.packet.PacketLogin;
+import org.halvors.Game.Server.network.packet.PacketUtil;
 
 public class AcceptThread extends Thread {
 	private final GameServer server;
@@ -34,7 +35,7 @@ public class AcceptThread extends Thread {
 					socket = pendingConnections.poll();
 					input = new DataInputStream(socket.getInputStream());
 				
-					packet = Packet.readPacket(input);
+					packet = PacketUtil.readPacket(input);
 				
 					if (packet != null && packet instanceof PacketLogin) {
 						loginHandler = new LoginHandler(server, socket);

@@ -28,7 +28,7 @@ public class Player extends LivingEntity {
 	}
 	
 	public void kick(String reason) {
-		getNetworkManager().getLoginHandler().disconnect(reason);
+		getNetworkManager().disconnect("You was kicked from the server: " + reason);
 	}
 
 	public NetworkManager getNetworkManager() {

@@ -5,35 +5,33 @@ import java.io.IOException;
 import java.net.Socket;
 
 import org.halvors.Game.Server.network.packet.Packet;
+import org.halvors.Game.Server.network.packet.PacketUtil;
 
 public class ReaderThread extends Thread {
 	private final NetworkManager networkManager;
-	private final Socket socket;
 	
 	public ReaderThread(String name, NetworkManager networkManager) {
 		super(name);
 		this.networkManager = networkManager;
-		this.socket = networkManager.getSocket();
 	}
 	
 	@Override
 	public void run() {
-		DataInputStream input = null;
+		DataInputStream input = networkManager.getInput();
 		Packet packet = null;
 		
-		while (socket.isConnected()) {
+		while (networkManager.isRunning()) {
 			try {
-				input = new DataInputStream(socket.getInputStream());
-				packet = Packet.readPacket(input);
+				packet = PacketUtil.readPacket(input);
 				
 				if (packet != null && input != null) {
-					packet.handlePacket(packet, networkManager.getServerHandler());
+					PacketUtil.handlePacket(packet, networkManager.getServerHandler());
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
 			} catch (InstantiationException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}

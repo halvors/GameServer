@@ -44,14 +44,6 @@ public class LoginHandler {
 		}
 	}
 	
-	public void disconnect(String reason) {
-		String message =  player.getName() + " left the game.";
-		server.broadcast(message);
-		
-		networkManager.sendPacket(new PacketDisconnect(reason));
-		networkManager.wakeThreads();
-	}
-	
 	public void handleLogin(PacketLogin packet) {
 //		String clientVersion = packet.getVersion();
 //		String serverVersion = server.getVersion();
