@@ -2,42 +2,30 @@ package org.halvors.Game.Server;
 
 public class Location {
 	private final World world;
-	private int x;
-	private int y;
-	private int z;
+	private final double x;
+	private final double y;
+	private final double z;
 	
-	public Location(World world, int x, int y, int z) {
+	public Location(World world, double x, double y, double z) {
 		this.world = world;
-		setX(x);
-		setY(y);
-		setZ(z);
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 
 	public World getWorld() {
 		return world;
 	}
 	
-	public int getX() {
+	public double getX() {
 		return x;
 	}
 
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
+	public double getY() {
 		return y;
 	}
 
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public int getZ() {
+	public double getZ() {
 		return z;
-	}
-
-	public void setZ(int z) {
-		this.z = z;
 	}
 }
