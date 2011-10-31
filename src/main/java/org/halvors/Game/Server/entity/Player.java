@@ -1,5 +1,6 @@
 package org.halvors.Game.Server.entity;
 
+import java.io.IOException;
 import java.net.SocketAddress;
 
 import org.halvors.Game.Server.GameServer;
@@ -27,7 +28,7 @@ public class Player extends LivingEntity {
 		getNetworkManager().sendPacket(new PacketChat(message));
 	}
 	
-	public void kick(String reason) {
+	public void kick(String reason) throws IOException {
 		getNetworkManager().disconnect("You was kicked from the server: " + reason);
 	}
 

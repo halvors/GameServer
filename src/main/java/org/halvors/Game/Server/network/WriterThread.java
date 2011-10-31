@@ -2,7 +2,6 @@ package org.halvors.Game.Server.network;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
 
 import org.halvors.Game.Server.network.packet.Packet;
 import org.halvors.Game.Server.network.packet.PacketUtil;

@@ -6,7 +6,6 @@ import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.entity.Player;
-import org.halvors.Game.Server.network.packet.PacketDisconnect;
 import org.halvors.Game.Server.network.packet.PacketLogin;
 
 public class LoginHandler {

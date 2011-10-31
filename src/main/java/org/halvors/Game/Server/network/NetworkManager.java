@@ -17,12 +17,12 @@ public class NetworkManager {
 	private final LoginHandler loginHandler;
 	
 	private final Queue<Packet> packetQueue = new LinkedList<Packet>();
-	private final DataInputStream input;
-    private final DataOutputStream output;
 	private final ReaderThread readerThread;
 	private final WriterThread writerThread;
 	
 	private Socket socket;
+	private DataInputStream input;
+    private DataOutputStream output;
 	private boolean isRunning = true;
 	
 	public NetworkManager(GameServer server, Socket socket, LoginHandler loginHandler, String name) throws IOException {
@@ -61,7 +61,7 @@ public class NetworkManager {
 		}
 	}
 	
-	public void disconnect(String reason) {
+	public void disconnect(String reason) throws IOException {
 		Player player = loginHandler.getPlayer();
 		String message =  player.getName() + " left the game.";
 		
@@ -69,6 +69,7 @@ public class NetworkManager {
 		server.broadcast(message);
 		
 		sendPacket(new PacketDisconnect(reason));
+		close();
 		wakeThreads();
 	}
 	
@@ -77,13 +78,21 @@ public class NetworkManager {
 		writerThread.interrupt();
 	}
 	
-	public void close(String s) throws IOException {
+	public void close() throws IOException {
         if (isRunning) {
         	setRunning(false);
         	
         	// Close socket.
             socket.close();
-            socket = null;
+//            socket = null;
+            
+            // Close input stream.
+            input.close();
+//            input = null;
+            
+            // Close input stream.
+            output.close();
+//            output = null;
         }
     }
 

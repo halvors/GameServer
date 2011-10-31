@@ -4,8 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import org.halvors.Game.Server.network.ServerHandler;
-
 /**
  * Represents a base packet.
  */

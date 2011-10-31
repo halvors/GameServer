@@ -30,7 +30,7 @@ public enum PacketType {
 		return lookupId.get(id);
 	}
 
-	public static PacketType getPacketFromClass(Class<?> clazz) {
+	public static PacketType getPacketFromClass(Class<? extends Packet> clazz) {
 		return lookupClass.get(clazz);
 	}
 
