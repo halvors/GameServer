@@ -84,15 +84,12 @@ public class NetworkManager {
         	
         	// Close socket.
             socket.close();
-//            socket = null;
             
             // Close input stream.
             input.close();
-//            input = null;
             
             // Close input stream.
             output.close();
-//            output = null;
         }
     }
 

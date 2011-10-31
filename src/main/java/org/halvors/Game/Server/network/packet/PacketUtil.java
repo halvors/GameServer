@@ -64,10 +64,10 @@ public class PacketUtil {
 	 * @throws InstantiationException 
 	 */
 	public static Packet getPacketInstance(int id) throws InstantiationException, IllegalAccessException {
-		Class<?> clazz = PacketType.getPacketFromId(id).getPacketClass();
+		Class<? extends Packet> packet = PacketType.getPacketFromId(id).getPacketClass();
 
-		if (clazz != null) {
-			return (Packet) clazz.newInstance();
+		if (packet != null) {
+			return packet.newInstance();
 		}
 		
 		return null;
