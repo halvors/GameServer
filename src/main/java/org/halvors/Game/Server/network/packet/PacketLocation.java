@@ -8,43 +8,38 @@ import java.util.UUID;
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.Location;
 import org.halvors.Game.Server.World;
-import org.halvors.Game.Server.entity.Entity;
 
-public class PacketEntityMove extends Packet {
+public class PacketLocation extends Packet {
 	private final GameServer server = GameServer.getInstance();
 	
-	private Entity entity;
+	private Location loc;
 	
-	public PacketEntityMove() {
+	public PacketLocation() {
 		
 	}
 	
-	public PacketEntityMove(Entity entity) {
-		setEntity(entity);
+	public PacketLocation(Location loc) {
+		setLocation(loc);
 	}
 	
 	@Override
 	public void readData(DataInputStream input) throws IOException {
 		UUID id = UUID.fromString(input.readUTF());
-		UUID worldId = UUID.fromString(input.readUTF());
 		double x = input.readDouble();
 		double y = input.readDouble();
 		double z = input.readDouble();
 		float pitch = input.readFloat();
 		float yaw = input.readFloat();
 		
-		World world = server.getWorld(worldId);
+		World world = server.getWorld(id);
 		Location loc = new Location(world, x, y, z, pitch, yaw);
-		Entity entity = new Entity(server, id, loc);
-		setEntity(entity);
+		setLocation(loc);
 	}
 
 	@Override
 	public void writeData(DataOutputStream output) throws IOException {
-		Location loc = entity.getLocation();
 		World world = loc.getWorld();
 		
-		output.writeUTF(entity.getId().toString());
 		output.writeUTF(world.getId().toString());
 		output.writeDouble(loc.getX());
 		output.writeDouble(loc.getY());
@@ -58,11 +53,11 @@ public class PacketEntityMove extends Packet {
 		
 	}
 	
-	public Entity getEntity() {
-		return entity;
+	public Location getLocation() {
+		return loc;
 	}
 	
-	public void setEntity(Entity entity) {
-		this.entity = entity;
+	public void setLocation(Location loc) {
+		this.loc = loc;
 	}
 }

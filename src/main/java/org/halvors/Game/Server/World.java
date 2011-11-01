@@ -10,18 +10,29 @@ import org.halvors.Game.Server.entity.Entity;
 public class World {
 	private final UUID id;
 	private final String name;
+	private final WorldType type;
 	private final List<Entity> entities = new ArrayList<Entity>();
 	private final Random random = new Random();
 	
 	private Location spawnLocation = new Location(this, random.nextDouble(), random.nextDouble(), random.nextDouble(), 0, 0);
 	
-	public World(String name, UUID id) {
+	public World(String name, UUID id, WorldType type) {
 		this.name = name;
 		this.id = id;
+		this.type = type;
+	}
+	
+	public World(String name, UUID id) {
+		this(name, id, WorldType.NORMAL);
+	}
+	
+	
+	public World(String name, WorldType type) {
+		this(name, UUID.randomUUID(), type);
 	}
 	
 	public World(String name) {
-		this(name, UUID.randomUUID());
+		this(name, WorldType.NORMAL);
 	}
 
 	public String getName() {
@@ -30,6 +41,10 @@ public class World {
 
 	public UUID getId() {
 		return id;
+	}
+	
+	public WorldType getType() {
+		return type;
 	}
 
 	public Location getSpawnLocation() {

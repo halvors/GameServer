@@ -9,14 +9,12 @@ import org.halvors.Game.Server.network.ServerHandler;
 import org.halvors.Game.Server.network.packet.PacketChat;
 
 public class Player extends LivingEntity {
-	private final GameServer server;
 	private final String name;
 	
 	private ServerHandler serverHandler;
 	
 	public Player(GameServer server, String name, Location location) {
 		super(server, location);
-		this.server = server;
 		this.name = name;
 	}
 	
@@ -42,9 +40,5 @@ public class Player extends LivingEntity {
 
 	public void setServerHandler(ServerHandler serverHandler) {
 		this.serverHandler = serverHandler;
-	}
-
-	public GameServer getServer() {
-		return server;
 	}
 }

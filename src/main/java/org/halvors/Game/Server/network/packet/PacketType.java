@@ -5,6 +5,9 @@ import java.util.HashMap;
 public enum PacketType {
 	PacketLogin(1, PacketLogin.class),
 	PacketChat(2, PacketChat.class),
+	PacketWorld(10, PacketWorld.class),
+	PacketEntity(11, PacketEntity.class),
+	PacketSpawnLocation(12, PacketSpawnLocation.class),
 	PacketDisconnect(255, PacketDisconnect.class);
 
 	private final int id;

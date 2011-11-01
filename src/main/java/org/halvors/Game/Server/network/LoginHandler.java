@@ -7,6 +7,8 @@ import java.util.logging.Level;
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.entity.Player;
 import org.halvors.Game.Server.network.packet.PacketLogin;
+import org.halvors.Game.Server.network.packet.PacketSpawnLocation;
+import org.halvors.Game.Server.network.packet.PacketWorld;
 
 public class LoginHandler {
 	private final GameServer server;
@@ -33,6 +35,8 @@ public class LoginHandler {
 			
 			// Send reply to the client.
 			networkManager.sendPacket(new PacketLogin(name, version));
+			networkManager.sendPacket(new PacketWorld(server.getWorlds().get(0)));
+			networkManager.sendPacket(new PacketSpawnLocation(player.getLocation()));
 			
 			// Inform server console.
 			server.log(Level.INFO, name + " logged in with id: " + player.getId());

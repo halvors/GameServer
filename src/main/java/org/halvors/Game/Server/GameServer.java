@@ -34,6 +34,9 @@ public class GameServer {
 	public void main(String[] args) {
 		log(Level.INFO, "Starting " + getName() + "Server " + getVersion());
 		
+		// Initialize.
+		addWorld("world");
+		
 		// Load configuration.
 		String host = configuration.getStringProperty("host", "0.0.0.0");
 		int port = configuration.getIntProperty("port", 7846);
@@ -104,6 +107,10 @@ public class GameServer {
 		}
 		
 		return null;
+	}
+	
+	public World addWorld(String name) {
+		return addWorld(new World(name));
 	}
 	
 	public void removeWorld(UUID id) {

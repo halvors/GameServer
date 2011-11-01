@@ -2,16 +2,12 @@ package org.halvors.Game.Server.entity;
 
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.Location;
-import org.halvors.Game.Server.network.packet.PacketEntityMove;
 
 public class LivingEntity extends Entity {
-	private final GameServer server;
-	
 	private int health;
 	
 	public LivingEntity(GameServer server, Location location) {
 		super(server, location);
-		this.server = server;
 	}
 
 	public int getHealth() {
@@ -43,6 +39,5 @@ public class LivingEntity extends Entity {
 	
 	public void move() {
 		// TODO: Implement this.
-		server.broadcastPacket(new PacketEntityMove(this));
     }
 }
