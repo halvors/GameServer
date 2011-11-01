@@ -13,8 +13,8 @@ public class Player extends LivingEntity {
 	
 	private ServerHandler serverHandler;
 	
-	public Player(GameServer server, String name, Location location) {
-		super(server, location);
+	public Player(GameServer server, String name, Location loc) {
+		super(server, loc);
 		this.name = name;
 	}
 	

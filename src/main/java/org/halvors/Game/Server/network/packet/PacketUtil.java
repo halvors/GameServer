@@ -49,6 +49,18 @@ public class PacketUtil {
 			handler.handlePacketChat((PacketChat) packet);
 			break;
 
+		case PacketWorld:
+			handler.handlePacketWorld((PacketWorld) packet);
+			break;
+			
+		case PacketEntity:
+			handler.handlePacketEntity((PacketEntity) packet);
+			break;
+			
+		case PacketSpawnLocation:
+			handler.handlePacketSpawnLocation((PacketSpawnLocation) packet);
+			break;
+			
         case PacketDisconnect:
         	handler.handlePacketDisconnect((PacketDisconnect) packet);
         	break;

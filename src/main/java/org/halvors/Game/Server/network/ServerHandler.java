@@ -7,7 +7,10 @@ import org.halvors.Game.Server.entity.Player;
 import org.halvors.Game.Server.network.packet.Packet;
 import org.halvors.Game.Server.network.packet.PacketChat;
 import org.halvors.Game.Server.network.packet.PacketDisconnect;
+import org.halvors.Game.Server.network.packet.PacketEntity;
 import org.halvors.Game.Server.network.packet.PacketLogin;
+import org.halvors.Game.Server.network.packet.PacketSpawnLocation;
+import org.halvors.Game.Server.network.packet.PacketWorld;
 
 public class ServerHandler {;
 	private final GameServer server;
@@ -60,5 +63,20 @@ public class ServerHandler {;
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	public void handlePacketWorld(PacketWorld packet) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void handlePacketEntity(PacketEntity packet) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void handlePacketSpawnLocation(PacketSpawnLocation packet) {
+		// TODO Auto-generated method stub
+		
 	}
 }
