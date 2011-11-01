@@ -1,9 +1,9 @@
 package org.halvors.Game.Server.entity;
 
 import java.io.IOException;
-import java.net.SocketAddress;
 
 import org.halvors.Game.Server.GameServer;
+import org.halvors.Game.Server.Location;
 import org.halvors.Game.Server.network.NetworkManager;
 import org.halvors.Game.Server.network.ServerHandler;
 import org.halvors.Game.Server.network.packet.PacketChat;
@@ -12,10 +12,10 @@ public class Player extends LivingEntity {
 	private final GameServer server;
 	private final String name;
 	
-	private ServerHandler networkServerHandler;
+	private ServerHandler serverHandler;
 	
-	public Player(GameServer server, String name) {
-		super(server);
+	public Player(GameServer server, String name, Location location) {
+		super(server, location);
 		this.server = server;
 		this.name = name;
 	}
@@ -33,19 +33,15 @@ public class Player extends LivingEntity {
 	}
 
 	public NetworkManager getNetworkManager() {
-		return networkServerHandler.getNetworkManager();
+		return serverHandler.getNetworkManager();
 	}
 	
-	public ServerHandler getNetworkServerHandler() {
-		return networkServerHandler;
+	public ServerHandler getServerHandler() {
+		return serverHandler;
 	}
 
-	public void setNetworkServerHandler(ServerHandler networkServerHandler) {
-		this.networkServerHandler = networkServerHandler;
-	}
-	
-	public SocketAddress getSocketAddress() {
-		return getNetworkManager().getSocket().getRemoteSocketAddress();
+	public void setServerHandler(ServerHandler serverHandler) {
+		this.serverHandler = serverHandler;
 	}
 
 	public GameServer getServer() {

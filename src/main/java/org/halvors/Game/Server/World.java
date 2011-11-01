@@ -8,14 +8,20 @@ import java.util.UUID;
 import org.halvors.Game.Server.entity.Entity;
 
 public class World {
-	private final UUID id = UUID.randomUUID();
+	private final UUID id;
 	private final String name;
 	private final List<Entity> entities = new ArrayList<Entity>();
 	private final Random random = new Random();
-	private Location spawnLocation = new Location(this, random.nextInt(), random.nextInt(), random.nextInt());
+	
+	private Location spawnLocation = new Location(this, random.nextDouble(), random.nextDouble(), random.nextDouble(), 0, 0);
+	
+	public World(String name, UUID id) {
+		this.name = name;
+		this.id = id;
+	}
 	
 	public World(String name) {
-		this.name = name;
+		this(name, UUID.randomUUID());
 	}
 
 	public String getName() {
@@ -60,3 +66,25 @@ public class World {
 		}
 	}
 }
+	
+//	public Entity spawn(Location location, Class<? extends Entity> clazz) throws IllegalArgumentException {
+//		if (location == null || clazz == null) {
+//			throw new IllegalArgumentException("Location or entity class cannot be null");
+//		}
+//
+//		Entity entity = null;
+//
+//		double x = location.getX();
+//		double y = location.getY();
+//		double z = location.getZ();
+//		float pitch = location.getPitch();
+//		float yaw = location.getYaw();
+//		
+//		if (entity != null) {
+//			addEntity(entity);
+//			return entity;
+//		}
+//		
+//		throw new IllegalArgumentException("Cannot spawn an entity for " + clazz.getName());
+//	}
+//}

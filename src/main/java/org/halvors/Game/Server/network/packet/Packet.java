@@ -12,9 +12,11 @@ public abstract class Packet {
 		
 	}
 	
-    public abstract void readPacketData(DataInputStream input) throws IOException;
+    public abstract void readData(DataInputStream input) throws IOException;
 	
-	public abstract void writePacketData(DataOutputStream output) throws IOException;
+	public abstract void writeData(DataOutputStream output) throws IOException;
+	
+	public abstract void run();
 	
 	/**
 	 * Get the PacketType.

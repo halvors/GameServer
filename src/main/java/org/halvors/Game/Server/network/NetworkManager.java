@@ -15,11 +15,11 @@ import org.halvors.Game.Server.network.packet.PacketDisconnect;
 public class NetworkManager {
 	private final GameServer server;
 	private final LoginHandler loginHandler;
-	
 	private final Queue<Packet> packetQueue = new LinkedList<Packet>();
 	private final ReaderThread readerThread;
 	private final WriterThread writerThread;
 	
+	private ServerHandler serverHandler;
 	private Socket socket;
 	private DataInputStream input;
     private DataOutputStream output;
@@ -49,17 +49,6 @@ public class NetworkManager {
         	packetQueue.add(packet);
         }
     }
-	
-	/**
-	 * Send a packet to all connected players.
-	 * 
-	 * @param packet
-	 */
-	public void broadcastPacket(Packet packet) {
-		for (Player player : server.getPlayers()) {
-			player.getNetworkManager().sendPacket(packet);
-		}
-	}
 	
 	public void disconnect(String reason) throws IOException {
 		Player player = loginHandler.getPlayer();
@@ -106,7 +95,11 @@ public class NetworkManager {
 	}
 	
 	public ServerHandler getServerHandler() {
-		return loginHandler.getServerHandler();
+		return serverHandler;
+	}
+	
+	public void setServerHandler(ServerHandler serverHandler) {
+		this.serverHandler = serverHandler;
 	}
 	
 	public Queue<Packet> getPacketQueue() {

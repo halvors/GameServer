@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import org.halvors.Game.Server.entity.Player;
 import org.halvors.Game.Server.network.ListenThread;
+import org.halvors.Game.Server.network.packet.Packet;
 
 public class GameServer {
 	private static GameServer instance;
@@ -95,10 +96,14 @@ public class GameServer {
 		return null;
 	}
 	
-	public World createWorld(String name) {
-		World world = new World(name);
+	public World addWorld(World world) {
+		if (world != null && !worlds.contains(world)) {
+			worlds.add(world);
+			
+			return world;
+		}
 		
-		return world;
+		return null;
 	}
 	
 	public void removeWorld(UUID id) {
@@ -152,7 +157,7 @@ public class GameServer {
 	}
 	
 	public Player addPlayer(String name) {
-		return addPlayer(new Player(this, name));
+		return addPlayer(new Player(this, name, null));
 	}
 	
 	public void removePlayer(Player player) {
@@ -161,9 +166,24 @@ public class GameServer {
 		}
 	}
 	
+	public void removePlayer(String name) {
+		removePlayer(getPlayer(name));
+	}
+	
 	public void broadcast(String message) {
 		for (Player p : players) {
 			p.sendMessage(message);
+		}
+	}
+	
+	/**
+	 * Send a packet to all connected players.
+	 * 
+	 * @param packet
+	 */
+	public void broadcastPacket(Packet packet) {
+		for (Player player : players) {
+			player.getNetworkManager().sendPacket(packet);
 		}
 	}
 

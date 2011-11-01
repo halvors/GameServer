@@ -29,12 +29,11 @@ public class AcceptThread extends Thread {
 		Packet packet = null;
 		LoginHandler loginHandler = null;
 		
-		while (server.isRunning()) { // TODO: Rewrite this?
+		while (server.isRunning()) {
 			if (!pendingConnections.isEmpty()) {
 				try {
 					socket = pendingConnections.poll();
 					input = new DataInputStream(socket.getInputStream());
-				
 					packet = PacketUtil.readPacket(input);
 				
 					if (packet != null && packet instanceof PacketLogin) {
@@ -46,12 +45,6 @@ public class AcceptThread extends Thread {
 				} catch (InstantiationException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
-			} else {
-				try {
-					Thread.sleep(1000L);
-				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}

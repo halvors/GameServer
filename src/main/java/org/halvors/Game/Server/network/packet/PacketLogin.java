@@ -18,15 +18,20 @@ public class PacketLogin extends Packet {
 	}
 	
 	@Override
-	public void readPacketData(DataInputStream input) throws IOException {
+	public void readData(DataInputStream input) throws IOException {
 		username = input.readUTF();
 		version = input.readUTF();
 	}
 
 	@Override
-	public void writePacketData(DataOutputStream output) throws IOException {
+	public void writeData(DataOutputStream output) throws IOException {
 		output.writeUTF(username);
 		output.writeUTF(version);
+	}
+	
+	@Override
+	public void run() {
+		
 	}
 	
 	public int getPacketSize() {

@@ -17,8 +17,9 @@ public class ServerHandler {;
 	public ServerHandler(GameServer server, NetworkManager networkManager, Player player) {
 		this.server = server;
 		this.networkManager = networkManager;
+		networkManager.setServerHandler(this);
 		this.player = player;
-		player.setNetworkServerHandler(this);
+		player.setServerHandler(this);
 	}
 
 	public void sendPacket(Packet packet) {

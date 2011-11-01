@@ -21,7 +21,7 @@ public class PacketUtil {
             }
             
             // Read the packet data.
-            packet.readPacketData(input);
+            packet.readData(input);
             
             return packet;
         }
@@ -31,7 +31,7 @@ public class PacketUtil {
 	
     public static void writePacket(Packet packet, DataOutputStream output) throws IOException {
         output.write(packet.getPacketId());
-        packet.writePacketData(output);
+        packet.writeData(output);
     }
     
     /**
