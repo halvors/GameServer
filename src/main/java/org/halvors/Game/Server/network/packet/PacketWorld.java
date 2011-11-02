@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.halvors.Game.Server.World;
 import org.halvors.Game.Server.WorldType;
+import org.halvors.Game.Server.entity.Player;
 
 public class PacketWorld extends Packet {
 	private World world;
@@ -38,7 +39,7 @@ public class PacketWorld extends Packet {
 	}
 	
 	@Override
-	public void run() {
+	public void run(Player player) {
 		
 	}
 

@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import org.halvors.Game.Server.entity.Player;
+
 public class PacketChat extends Packet {
 	public String message;
 	
@@ -26,7 +28,7 @@ public class PacketChat extends Packet {
 	}
 	
 	@Override
-	public void run() {
+	public void run(Player player) {
 		
 	}
 	

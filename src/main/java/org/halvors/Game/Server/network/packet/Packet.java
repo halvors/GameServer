@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import org.halvors.Game.Server.entity.Player;
+
 /**
  * Represents a base packet.
  */
@@ -16,7 +18,7 @@ public abstract class Packet {
 	
 	public abstract void writeData(DataOutputStream output) throws IOException;
 	
-	public abstract void run();
+	public abstract void run(Player player);
 	
 	/**
 	 * Get the PacketType.

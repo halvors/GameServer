@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.Location;
 import org.halvors.Game.Server.World;
+import org.halvors.Game.Server.entity.Player;
 
 public class PacketLocation extends Packet {
 	private final GameServer server = GameServer.getInstance();
@@ -49,7 +50,7 @@ public class PacketLocation extends Packet {
 	}
 	
 	@Override
-	public void run() {
+	public void run(Player player) {
 		
 	}
 	
