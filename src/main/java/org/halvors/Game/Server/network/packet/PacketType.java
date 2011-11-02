@@ -6,8 +6,9 @@ public enum PacketType {
 	PacketLogin(1, PacketLogin.class),
 	PacketChat(2, PacketChat.class),
 	PacketWorld(10, PacketWorld.class),
-	PacketEntity(11, PacketEntity.class),
-	PacketSpawnLocation(12, PacketSpawnLocation.class),
+	PacketSpawnLocation(11, PacketSpawnLocation.class),
+	PacketEntity(15, PacketEntity.class),
+	PacketEntityVelocity(16, PacketEntityVelocity.class),
 	PacketDisconnect(255, PacketDisconnect.class);
 
 	private final int id;
