@@ -20,14 +20,12 @@ public class WriterThread extends Thread {
 	public void run() {
 		Packet packet = null;
 		
-		while (networkManager.isRunning()) {
+		while (networkManager.isConnected()) {
 			try {
-				synchronized (networkManager.getPacketQueue()) {
-					packet = networkManager.getPacketQueue().poll();
+				packet = networkManager.getPacketQueue().poll();
 				
-					if (packet != null && output != null) {
-						PacketUtil.writePacket(packet, output);
-					}
+				if (output != null && packet != null) {
+					PacketUtil.writePacket(packet, output);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

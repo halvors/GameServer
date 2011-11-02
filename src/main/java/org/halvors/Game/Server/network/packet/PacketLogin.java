@@ -7,16 +7,16 @@ import java.io.IOException;
 import org.halvors.Game.Server.entity.Player;
 
 public class PacketLogin extends Packet {
-	public String username;
-	public String version;
+	private String username;
+	private String version;
 	
 	public PacketLogin() {
 		
 	}
 	
 	public PacketLogin(String username, String version) {
-		this.username = username;
-		this.version = version;
+		setUsername(username);
+		setVersion(version);
 	}
 	
 	@Override

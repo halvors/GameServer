@@ -99,6 +99,10 @@ public class GameServer {
 		return null;
 	}
 	
+	public boolean hasWorld(World world) {
+		return worlds.contains(world);
+	}
+	
 	public World addWorld(World world) {
 		if (world != null && !worlds.contains(world)) {
 			worlds.add(world);
@@ -163,9 +167,9 @@ public class GameServer {
 		return null;
 	}
 	
-	public Player addPlayer(String name) {
-		return addPlayer(new Player(this, name, null));
-	}
+//	public Player addPlayer(String name) {
+//		return addPlayer(new Player(this, name, null));
+//	}
 	
 	public void removePlayer(Player player) {
 		if (players.contains(player)) {

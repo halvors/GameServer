@@ -14,7 +14,7 @@ public class World {
 	private final List<Entity> entities = new ArrayList<Entity>();
 	private final Random random = new Random();
 	
-	private Location spawnLocation = new Location(this, random.nextDouble(), random.nextDouble(), random.nextDouble(), 0, 0);
+	private Location spawnLocation = new Location(this, random.nextFloat(), random.nextFloat(), random.nextFloat(), 0, 0);
 	
 	public World(String name, UUID id, WorldType type) {
 		this.name = name;

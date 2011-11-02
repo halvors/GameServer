@@ -23,7 +23,7 @@ public class NetworkManager {
 	private Socket socket;
 	private DataInputStream input;
     private DataOutputStream output;
-	private boolean isRunning = true;
+	private boolean isConnected = true;
 	
 	public NetworkManager(GameServer server, Socket socket, LoginHandler loginHandler, String name) throws IOException {
 		this.server = server;
@@ -45,7 +45,7 @@ public class NetworkManager {
 	 * @param packet
 	 */
 	public void sendPacket(Packet packet) {
-        if (packet != null) {
+        if (isConnected() && packet != null) {
         	packetQueue.add(packet);
         }
     }
@@ -57,6 +57,7 @@ public class NetworkManager {
 		// Send leave message.
 		server.broadcast(message);
 		
+		// Do the disconnect.
 		sendPacket(new PacketDisconnect(reason));
 		close();
 		wakeThreads();
@@ -68,8 +69,8 @@ public class NetworkManager {
 	}
 	
 	public void close() throws IOException {
-        if (isRunning) {
-        	setRunning(false);
+        if (isConnected()) {
+        	setConnected(false);
         	
         	// Close socket.
             socket.close();
@@ -106,12 +107,12 @@ public class NetworkManager {
 		return packetQueue;
 	}
 	
-	public boolean isRunning() {
-		return isRunning;
+	public boolean isConnected() {
+		return isConnected;
 	}
 
-	public void setRunning(boolean isRunning) {
-		this.isRunning = isRunning;
+	public void setConnected(boolean isConnected) {
+		this.isConnected = isConnected;
 	}
 
 	public DataInputStream getInput() {

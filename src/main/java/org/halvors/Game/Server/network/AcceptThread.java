@@ -29,14 +29,14 @@ public class AcceptThread extends Thread {
 		Packet packet = null;
 		LoginHandler loginHandler = null;
 		
-		while (server.isRunning()) {
+		while (true) {
 			if (!pendingConnections.isEmpty()) {
 				try {
 					socket = pendingConnections.poll();
 					input = new DataInputStream(socket.getInputStream());
 					packet = PacketUtil.readPacket(input);
 				
-					if (packet != null && packet instanceof PacketLogin) {
+					if (input != null && packet != null && packet instanceof PacketLogin) {
 						loginHandler = new LoginHandler(server, socket);
 						loginHandler.handleLogin((PacketLogin) packet);
 					}

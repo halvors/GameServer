@@ -26,9 +26,9 @@ public class PacketLocation extends Packet {
 	@Override
 	public void readData(DataInputStream input) throws IOException {
 		UUID id = UUID.fromString(input.readUTF());
-		double x = input.readDouble();
-		double y = input.readDouble();
-		double z = input.readDouble();
+		float x = input.readFloat();
+		float y = input.readFloat();
+		float z = input.readFloat();
 		float pitch = input.readFloat();
 		float yaw = input.readFloat();
 		
@@ -42,9 +42,9 @@ public class PacketLocation extends Packet {
 		World world = loc.getWorld();
 		
 		output.writeUTF(world.getId().toString());
-		output.writeDouble(loc.getX());
-		output.writeDouble(loc.getY());
-		output.writeDouble(loc.getZ());
+		output.writeFloat(loc.getX());
+		output.writeFloat(loc.getY());
+		output.writeFloat(loc.getZ());
 		output.writeFloat(loc.getPitch());
 		output.writeFloat(loc.getYaw());
 	}

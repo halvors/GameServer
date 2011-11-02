@@ -7,8 +7,6 @@ import java.util.logging.Level;
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.entity.Player;
 import org.halvors.Game.Server.network.packet.PacketLogin;
-import org.halvors.Game.Server.network.packet.PacketSpawnLocation;
-import org.halvors.Game.Server.network.packet.PacketWorld;
 
 public class LoginHandler {
 	private final GameServer server;
@@ -28,15 +26,20 @@ public class LoginHandler {
 		
 		if (name != null && version != null) {
 			// TODO: Load player here.
-			player = server.addPlayer(name);
+//			Random random = new Random();
+//			Location loc = new Location(null, random.nextFloat(), random.nextFloat(), random.nextFloat(), 0, 0);
+			player = new Player(server, name, null);
+			server.addPlayer(player);
 			
 			// Create the ServerHandler.
 			serverHandler = new ServerHandler(server, networkManager, player);
 			
 			// Send reply to the client.
 			networkManager.sendPacket(new PacketLogin(name, version));
-			networkManager.sendPacket(new PacketWorld(server.getWorlds().get(0)));
-			networkManager.sendPacket(new PacketSpawnLocation(player.getLocation()));
+//			networkManager.sendPacket(new PacketWorld(server.getWorlds().get(0)));
+//			networkManager.sendPacket(new PacketSpawnLocation(player.getLocation()));
+//			
+//			server.broadcastPacket(new PacketEntity(player));
 			
 			// Inform server console.
 			server.log(Level.INFO, name + " logged in with id: " + player.getId());
@@ -44,25 +47,13 @@ public class LoginHandler {
 			// Send login message.
 			String message = name + " joined the game.";
 			server.broadcast(message);
+		} else {
+			server.log(Level.WARNING, "--------------------------------------------");
 		}
 	}
 	
 	public void handleLogin(PacketLogin packet) {
-//		String clientVersion = packet.getVersion();
-//		String serverVersion = server.getVersion();
-//		
-//		// Little version check here.
-//		if (clientVersion != serverVersion) {
-//            if (clientVersion > serverVersion) {
-//                disconnect("Server is outdated!");
-//            } else {
-//                disconnect("Client is outdated!");
-//            }
-//            
-//            return;
-//        }
-		
-		// Version is ok, then login.
+		// Do login :)
 		login(packet);
 	}
 

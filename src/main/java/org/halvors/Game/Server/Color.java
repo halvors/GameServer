@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * All supported color values for chat
  */
-public enum ChatColor {
+public enum Color {
 
     /**
      * Represents black
@@ -74,9 +74,9 @@ public enum ChatColor {
     WHITE(0xF);
 
     private final int code;
-    private final static Map<Integer, ChatColor> colors = new HashMap<Integer, ChatColor>();
+    private final static Map<Integer, Color> colors = new HashMap<Integer, Color>();
 
-    private ChatColor(final int code) {
+    private Color(final int code) {
         this.code = code;
     }
 
@@ -98,9 +98,9 @@ public enum ChatColor {
      * Gets the color represented by the specified color code
      *
      * @param code Code to check
-     * @return Associative {@link org.bukkit.ChatColor} with the given code, or null if it doesn't exist
+     * @return Associative {@link org.Color.ChatColor} with the given code, or null if it doesn't exist
      */
-    public static ChatColor getByCode(final int code) {
+    public static Color getByCode(final int code) {
         return colors.get(code);
     }
 
@@ -119,7 +119,7 @@ public enum ChatColor {
     }
 
     static {
-        for (ChatColor color : ChatColor.values()) {
+        for (Color color : Color.values()) {
             colors.put(color.getCode(), color);
         }
     }
