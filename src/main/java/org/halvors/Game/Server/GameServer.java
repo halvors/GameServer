@@ -44,9 +44,11 @@ public class GameServer {
 		// Check if host is greater than 0.
 		if (host.length() > 0 && port > 0) {
 			try {
-				listenThread = new ListenThread("Listen thread", this, InetAddress.getByName(host), port);
+				InetAddress address = InetAddress.getByName(host);
+				
+				listenThread = new ListenThread("Listen thread", this, address, port);
 				listenThread.start();
-				log(Level.INFO, "Server is running on: " + host + ":" + Integer.toString(port));
+				log(Level.INFO, "Server is running on: " + address.toString() + ":" + Integer.toString(port));
 			} catch (IOException e) {
 				log(Level.WARNING, "Failed to bind to port: " + Integer.toString(port));
 				e.printStackTrace();
@@ -210,7 +212,7 @@ public class GameServer {
 		return isRunning;
 	}
 
-//	public void setRunning(boolean isRunning) {
-//		this.isRunning = isRunning;
-//	}
+	public void setRunning(boolean isRunning) {
+		this.isRunning = isRunning;
+	}
 }

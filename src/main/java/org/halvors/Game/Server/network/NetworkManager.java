@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.entity.Player;
@@ -28,8 +29,8 @@ public class NetworkManager {
 	public NetworkManager(GameServer server, Socket socket, LoginHandler loginHandler, String name) throws IOException {
 		this.server = server;
 		this.socket = socket;
-		socket.setSoTimeout(30000);
-        socket.setTrafficClass(24); // TODO: Check this?
+//		socket.setSoTimeout(30000);
+//      socket.setTrafficClass(24); // TODO: Check this?
 		this.loginHandler = loginHandler;
 		this.input = new DataInputStream(socket.getInputStream());
 		this.output = new DataOutputStream(socket.getOutputStream());
@@ -46,6 +47,7 @@ public class NetworkManager {
 	 */
 	public void sendPacket(Packet packet) {
         if (isConnected() && packet != null) {
+        	server.log(Level.INFO, "Packet added to the queue.");
         	packetQueue.add(packet);
         }
     }

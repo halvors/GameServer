@@ -47,12 +47,12 @@ public class LoginHandler {
 			// Send login message.
 			String message = name + " joined the game.";
 			server.broadcast(message);
-		} else {
-			server.log(Level.WARNING, "--------------------------------------------");
 		}
 	}
 	
 	public void handleLogin(PacketLogin packet) {
+		server.log(Level.INFO, "KOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOK");
+		
 		// Do login :)
 		login(packet);
 	}

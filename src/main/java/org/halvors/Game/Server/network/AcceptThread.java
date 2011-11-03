@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.network.packet.Packet;
@@ -36,9 +37,12 @@ public class AcceptThread extends Thread {
 					input = new DataInputStream(socket.getInputStream());
 					packet = PacketUtil.readPacket(input);
 				
-					if (input != null && packet != null && packet instanceof PacketLogin) {
+					if (socket != null && input != null && packet != null && packet instanceof PacketLogin) {
+						server.log(Level.INFO, "HUH?11111111");
 						loginHandler = new LoginHandler(server, socket);
 						loginHandler.handleLogin((PacketLogin) packet);
+					} else {
+						server.log(Level.INFO, "HUH?22222222");
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -54,6 +58,7 @@ public class AcceptThread extends Thread {
 	public void addToPendigConnections(Socket socket) {
 		// We don't want to accept the socket twice.
 		if (!pendingConnections.contains(socket)) {
+			server.log(Level.INFO, "HUH?");
 			pendingConnections.add(socket);
 		}
 	}
