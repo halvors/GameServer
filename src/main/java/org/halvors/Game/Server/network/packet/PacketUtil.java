@@ -7,67 +7,41 @@ import java.io.IOException;
 import org.halvors.Game.Server.network.ServerHandler;
 
 public class PacketUtil {
-	public static Packet readPacket(DataInputStream input) throws IOException, InstantiationException, IllegalAccessException {
-		// Read the id form the DataInputStream.
-        int id = input.read();
+	public static Packet readPacket(DataInputStream input) throws IOException {
+		if (input != null) {
+			// Read the id form the DataInputStream.
+			int id = input.read();
             
-        // Packet's in out system can't be less than 0.
-        if (id >= 0) {
-            Packet packet = getPacketInstance(id);
+			// Packet's id can't be than 0.
+			if (id >= 0) {
+				Packet packet = getPacketFromId(id);
             	
-            // Check if the packet was found in the HashMap, if not throw an Exception.
-            if (packet == null) {
-            	throw new IOException("Bad packet id " + id);
-            }
-            
-            // Read the packet data.
-            packet.readData(input);
-            
-            return packet;
-        }
+	            // Check if the packet was found in the HashMap, if not throw an Exception.
+	            if (packet != null) {
+	            	// Read the packet data.
+	            	packet.readData(input);
+	            
+	            	return packet;
+	            } else {
+	            	throw new IOException("Bad packet id: " + id);
+	            }
+	        }
+		}
 		
 		return null;
 	}
 	
-    public static void writePacket(Packet packet, DataOutputStream output) throws IOException {
-        output.write(packet.getPacketId());
-        packet.writeData(output);
+    public static void writePacket(DataOutputStream output, Packet packet) throws IOException {
+    	if (output != null && packet != null) {
+    		// Write the packet id to the stream.
+    		output.write(packet.getPacketId());
+    		
+    		// Then write the packet data.
+        	packet.writeData(output);
+    	}
     }
     
     /**
-     * Handle packet's after being read.
-     * 
-     * @param packet
-     * @param handler
-     */
-	public static void handlePacket(Packet packet, ServerHandler handler) {
-		PacketType type = packet.getPacketType();
-		
-		// Detect PacketType and handle it in the right way :D
-		switch (type) {
-		case PacketChat:
-			handler.handlePacketChat((PacketChat) packet);
-			break;
-
-		case PacketWorld:
-			handler.handlePacketWorld((PacketWorld) packet);
-			break;
-			
-		case PacketEntity:
-			handler.handlePacketEntity((PacketEntity) packet);
-			break;
-			
-		case PacketSpawnLocation:
-			handler.handlePacketSpawnLocation((PacketSpawnLocation) packet);
-			break;
-			
-        case PacketDisconnect:
-        	handler.handlePacketDisconnect((PacketDisconnect) packet);
-        	break;
-		}
-	}
-    
-	/**
 	 * Get a new packet from a specific id.
 	 * 
 	 * @param id
@@ -75,13 +49,42 @@ public class PacketUtil {
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
 	 */
-	public static Packet getPacketInstance(int id) throws InstantiationException, IllegalAccessException {
+	public static Packet getPacketFromId(int id) {
 		Class<? extends Packet> packet = PacketType.getPacketFromId(id).getPacketClass();
-
+		
 		if (packet != null) {
-			return packet.newInstance();
+			try {
+				return packet.newInstance();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return null;
     }
+	
+    /**
+     * Handle packet's after being read.
+     * 
+     * @param packet
+     * @param handler
+     */
+	public static void handlePacket(Packet packet, ServerHandler serverHandler) {
+		if (packet != null && serverHandler != null) {
+			PacketType type = packet.getPacketType();
+			
+			// Detect PacketType and handle it in the right way.
+			switch (type) {
+			case PacketChat:
+				serverHandler.handlePacketChat((PacketChat) packet);
+				break;
+				
+	        case PacketDisconnect:
+	        	serverHandler.handlePacketDisconnect((PacketDisconnect) packet);
+	        	break;
+			}
+		}
+	}
 }

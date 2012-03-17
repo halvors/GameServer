@@ -15,10 +15,11 @@ import org.halvors.Game.Server.network.packet.PacketUtil;
 public class AcceptThread extends Thread {
 	private final GameServer server;
 	private final ListenThread listenThread;
-	private final Queue<Socket> pendingConnections = new LinkedList<Socket>();
+	private final Queue<Socket> acceptQueue = new LinkedList<Socket>();
 	
 	public AcceptThread(String name, GameServer server, ListenThread listenThread) {
 		super(name);
+		
 		this.server = server;
 		this.listenThread = listenThread;
 	}
@@ -28,49 +29,48 @@ public class AcceptThread extends Thread {
 		Socket socket = null;
 		DataInputStream input = null;
 		Packet packet = null;
-		LoginHandler loginHandler = null;
+		NetworkManager networkManager = null;
 		
-		while (true) {
-			if (!pendingConnections.isEmpty()) {
-				try {
-					socket = pendingConnections.poll();
-					input = new DataInputStream(socket.getInputStream());
-					packet = PacketUtil.readPacket(input);
-				
-					if (socket != null && input != null && packet != null && packet instanceof PacketLogin) {
-						server.log(Level.INFO, "HUH?11111111");
-						loginHandler = new LoginHandler(server, socket);
-						loginHandler.handleLogin((PacketLogin) packet);
-					} else {
-						server.log(Level.INFO, "HUH?22222222");
+		while (server.isRunning()) {
+			try {
+				synchronized (acceptQueue) {
+					socket = acceptQueue.poll();
+					
+					if (socket != null) {
+						input = new DataInputStream(socket.getInputStream());
+						packet = PacketUtil.readPacket(input);
+						
+						server.log(Level.INFO, "Accepted connection from: " + socket.getRemoteSocketAddress().toString());
+						
+						if (packet != null && packet instanceof PacketLogin) {
+							networkManager = new NetworkManager(server, socket);
+							networkManager.login((PacketLogin) packet);
+						}
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}
 	
-	public void addToPendigConnections(Socket socket) {
-		// We don't want to accept the socket twice.
-		if (!pendingConnections.contains(socket)) {
-			server.log(Level.INFO, "HUH?");
-			pendingConnections.add(socket);
-		}
+	public GameServer getServer() {
+		return server;
 	}
 	
-	public void removeFromPendigConnections(Socket socket) {
-		// We only want to remove socket that exist's.
-		if (pendingConnections.contains(socket)) {
-			pendingConnections.remove(socket);
-		}
-	}
-
 	public ListenThread getListenThread() {
 		return listenThread;
+	}
+	
+	public Queue<Socket> getQueue() {
+		return acceptQueue;
+	}
+	
+	public boolean queue(Socket socket) {
+		return acceptQueue.add(socket);
+	}
+	
+	public boolean removeFromQueue(Socket socket) {
+		return acceptQueue.remove(socket);
 	}
 }

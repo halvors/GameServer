@@ -4,15 +4,10 @@ import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.entity.Player;
-import org.halvors.Game.Server.network.packet.Packet;
 import org.halvors.Game.Server.network.packet.PacketChat;
 import org.halvors.Game.Server.network.packet.PacketDisconnect;
-import org.halvors.Game.Server.network.packet.PacketEntity;
-import org.halvors.Game.Server.network.packet.PacketLogin;
-import org.halvors.Game.Server.network.packet.PacketSpawnLocation;
-import org.halvors.Game.Server.network.packet.PacketWorld;
 
-public class ServerHandler {;
+public class ServerHandler {
 	private final GameServer server;
 	private final NetworkManager networkManager;
 	private final Player player;
@@ -20,63 +15,36 @@ public class ServerHandler {;
 	public ServerHandler(GameServer server, NetworkManager networkManager, Player player) {
 		this.server = server;
 		this.networkManager = networkManager;
-		networkManager.setServerHandler(this);
 		this.player = player;
+		
+		// Set this as ServerHandler for NetworkManager and Player.
+		networkManager.setServerHandler(this);
 		player.setServerHandler(this);
-	}
-
-	public void sendPacket(Packet packet) {
-		networkManager.sendPacket(packet);
-	}
-	
-	public void handleLogin(PacketLogin packet) {
-		// Not used, this is handled by LoginHandler.
+		player.setNetworkManager(networkManager);
 	}
 	
 	public void handlePacketChat(PacketChat packet) {
 		String message = player.getName() + ": " + packet.getMessage();
 		
-		// Print the message to the console.
-		server.log(Level.INFO, message);
-		
-		// Send the message to all the other players.
+		// Send the message to all the connected players.
 		server.broadcast(message);
+		
+		server.log(Level.INFO, message);
 	}
 	
 	public void handlePacketDisconnect(PacketDisconnect packet) {
-		String message = player.getName() + " left the game.";
-		
-		// Print the message to the console.
-		server.log(Level.INFO, message);
-			
-		// Send the message to all the other players.
-		server.broadcast(message);
-	}
-
-	public NetworkManager getNetworkManager() {
-		return networkManager;
+		server.broadcast(player.getName() + " left the game.");
 	}
 
 	public GameServer getServer() {
 		return server;
 	}
+	
+	public NetworkManager getNetworkManager() {
+		return networkManager;
+	}
 
 	public Player getPlayer() {
 		return player;
-	}
-
-	public void handlePacketWorld(PacketWorld packet) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void handlePacketEntity(PacketEntity packet) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void handlePacketSpawnLocation(PacketSpawnLocation packet) {
-		// TODO Auto-generated method stub
-		
 	}
 }

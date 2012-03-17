@@ -1,8 +1,8 @@
 package org.halvors.Game.Server;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 import org.halvors.Game.Server.entity.Player;
 import org.halvors.Game.Server.network.ListenThread;
-import org.halvors.Game.Server.network.packet.Packet;
 
 public class GameServer {
 	private static GameServer instance;
@@ -20,7 +19,7 @@ public class GameServer {
 	private final String version = "0.0.2";
 	
 	private final Logger logger = Logger.getLogger("Game");
-	private final Configuration configuration = new Configuration(this, new File("server.properties"));
+	private final Configuration config = new Configuration(this, new File("server.properties"));
 	private final List<World> worlds = new ArrayList<World>();
 	private final List<Player> players = new ArrayList<Player>();
 	
@@ -38,21 +37,16 @@ public class GameServer {
 		addWorld("world");
 		
 		// Load configuration.
-		String host = configuration.getStringProperty("host", "0.0.0.0");
-		int port = configuration.getIntProperty("port", 7846);
+		String host = config.getStringProperty("host", "0.0.0.0");
+		int port = config.getIntProperty("port", 22075);
 		
 		// Check if host is greater than 0.
-		if (host.length() > 0 && port > 0) {
+		if (!host.isEmpty()) {			
 			try {
-				InetAddress address = InetAddress.getByName(host);
-				
-				listenThread = new ListenThread("Listen thread", this, address, port);
+				listenThread = new ListenThread("Listen thread", this, InetAddress.getByName(host), port);
 				listenThread.start();
-				log(Level.INFO, "Server is running on: " + address.toString() + ":" + Integer.toString(port));
-			} catch (IOException e) {
-				log(Level.WARNING, "Failed to bind to port: " + Integer.toString(port));
+			} catch (UnknownHostException e) {
 				e.printStackTrace();
-				// TODO: Maybe shut down server here. No need for a server that isn't listening for clients :P
 			}
 		}
 	}
@@ -159,6 +153,10 @@ public class GameServer {
 		return null;
 	}
 	
+	public boolean hasPlayer(Player player) {
+		return players.contains(player);
+	}
+	
 	public Player addPlayer(Player player) {
 		if (player != null && !players.contains(player)) {
 			players.add(player);
@@ -169,9 +167,9 @@ public class GameServer {
 		return null;
 	}
 	
-//	public Player addPlayer(String name) {
-//		return addPlayer(new Player(this, name, null));
-//	}
+	public Player addPlayer(String name) {
+		return addPlayer(new Player(this, name));
+	}
 	
 	public void removePlayer(Player player) {
 		if (players.contains(player)) {
@@ -188,20 +186,9 @@ public class GameServer {
 			p.sendMessage(message);
 		}
 	}
-	
-	/**
-	 * Send a packet to all connected players.
-	 * 
-	 * @param packet
-	 */
-	public void broadcastPacket(Packet packet) {
-		for (Player player : players) {
-			player.getNetworkManager().sendPacket(packet);
-		}
-	}
 
 	public Configuration getConfiguration() {
-		return configuration;
+		return config;
 	}
 	
 	public ListenThread getNetworkListenThread() {

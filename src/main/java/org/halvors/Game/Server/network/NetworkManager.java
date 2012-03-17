@@ -12,10 +12,10 @@ import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.entity.Player;
 import org.halvors.Game.Server.network.packet.Packet;
 import org.halvors.Game.Server.network.packet.PacketDisconnect;
+import org.halvors.Game.Server.network.packet.PacketLogin;
 
 public class NetworkManager {
 	private final GameServer server;
-	private final LoginHandler loginHandler;
 	private final Queue<Packet> packetQueue = new LinkedList<Packet>();
 	private final ReaderThread readerThread;
 	private final WriterThread writerThread;
@@ -24,66 +24,104 @@ public class NetworkManager {
 	private Socket socket;
 	private DataInputStream input;
     private DataOutputStream output;
-	private boolean isConnected = true;
+    
+    private Player player;
 	
-	public NetworkManager(GameServer server, Socket socket, LoginHandler loginHandler, String name) throws IOException {
+	public NetworkManager(GameServer server, Socket socket) throws IOException {
 		this.server = server;
 		this.socket = socket;
-//		socket.setSoTimeout(30000);
+		socket.setSoTimeout(30000);
 //      socket.setTrafficClass(24); // TODO: Check this?
-		this.loginHandler = loginHandler;
 		this.input = new DataInputStream(socket.getInputStream());
 		this.output = new DataOutputStream(socket.getOutputStream());
-		this.readerThread = new ReaderThread(name + ": Reader thread", this);
-        this.writerThread = new WriterThread(name + ": Writer thread", this);
+		this.readerThread = new ReaderThread("Reader thread", this);
+        this.writerThread = new WriterThread("Writer thread", this);
         readerThread.start();
         writerThread.start();
 	}
 	
 	/**
-	 * Simply send a single packet.
+	 * Sends a single packet.
 	 * 
 	 * @param packet
 	 */
 	public void sendPacket(Packet packet) {
-        if (isConnected() && packet != null) {
-        	server.log(Level.INFO, "Packet added to the queue.");
+        if (packet != null) {
         	packetQueue.add(packet);
+        	
+        	server.log(Level.INFO, "Packet with id: " + packet.getPacketId() + " queued.");
         }
     }
 	
-	public void disconnect(String reason) throws IOException {
-		Player player = loginHandler.getPlayer();
-		String message =  player.getName() + " left the game.";
-		
-		// Send leave message.
-		server.broadcast(message);
-		
-		// Do the disconnect.
-		sendPacket(new PacketDisconnect(reason));
-		close();
-		wakeThreads();
+	/**
+	 * Broadcast a packet, also sends it to all connected peers.
+	 * 
+	 * @param packet
+	 */
+	public void broadcastPacket(Packet packet) {
+		for (Player p : server.getPlayers()) {
+			p.getNetworkManager().sendPacket(packet);
+		}
 	}
+	
+	public void login(PacketLogin packet) {
+		String name = packet.getUsername();
+		String version = packet.getVersion();
+		
+		if (name != null && version != null) {
+			if (version != server.getVersion()) {
+				disconnect("You are using an old version: " + version);
+			}
+			
+			// Create Player and ServerHandler.
+			player = new Player(server, name);
+			serverHandler = new ServerHandler(server, this, player);
+			
+			// Send reply to the client.
+			sendPacket(new PacketLogin(name, version));
+			
+			// Inform server console.
+			server.log(Level.INFO, name + " logged in with id: " + player.getId());
+			
+			// Send login message.
+			String message = name + " joined the game.";
+			server.broadcast(message);
+		}
+	}
+	
+	public void disconnect(String reason) {
+		// Send the leave message.
+		server.broadcast(player.getName() + " left the game.");
+		
+		// Tell the client to do the disconnect.
+		sendPacket(new PacketDisconnect(reason));
+		
+		try {
+			close();
+			wakeThreads();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void close() throws IOException {
+    	// Close socket.
+        socket.close();
+        socket = null;
+        
+        // Close input stream.
+        input.close();
+        input = null;
+        
+        // Close input stream.
+        output.close();
+        output = null;
+    }
 	
 	public void wakeThreads() {
 		readerThread.interrupt();
 		writerThread.interrupt();
 	}
-	
-	public void close() throws IOException {
-        if (isConnected()) {
-        	setConnected(false);
-        	
-        	// Close socket.
-            socket.close();
-            
-            // Close input stream.
-            input.close();
-            
-            // Close input stream.
-            output.close();
-        }
-    }
 
 	public Socket getSocket() {
 		return socket;
@@ -91,10 +129,6 @@ public class NetworkManager {
 
 	public GameServer getServer() {
 		return server;
-	}
-
-	public LoginHandler getLoginHandler() {
-		return loginHandler;
 	}
 	
 	public ServerHandler getServerHandler() {
@@ -108,20 +142,12 @@ public class NetworkManager {
 	public Queue<Packet> getPacketQueue() {
 		return packetQueue;
 	}
-	
-	public boolean isConnected() {
-		return isConnected;
-	}
 
-	public void setConnected(boolean isConnected) {
-		this.isConnected = isConnected;
-	}
-
-	public DataInputStream getInput() {
+	public DataInputStream getDataInputStream() {
 		return input;
 	}
 	
-	public DataOutputStream getOutput() {
+	public DataOutputStream getDataOutputStream() {
 		return output;
 	}
 	

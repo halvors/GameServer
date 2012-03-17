@@ -10,15 +10,26 @@ import org.halvors.Game.Server.GameServer;
 
 public class ListenThread extends Thread {
 	private final GameServer server;
-	private final ServerSocket serverSocket;
 	private final AcceptThread acceptThread;
 	
-	public ListenThread(String name, GameServer server, InetAddress address, int port) throws IOException {
+	private ServerSocket serverSocket;
+	
+	public ListenThread(String name, GameServer server, InetAddress address, int port) {
 		super(name);
-		this.server = server;
-		this.serverSocket = new ServerSocket(port, 0, address);
 		
-		// Accept connections and logins here before we register a new NetworkManager.
+		this.server = server;
+		
+		// Start listening.
+		try {
+			serverSocket = new ServerSocket(port, 0, address);
+			
+			server.log(Level.INFO, "Server is running on port: "+ Integer.toString(port));
+		} catch (IOException e) {
+			server.log(Level.WARNING, "Failed to bind to port: " + Integer.toString(port));
+			e.printStackTrace();
+		}
+		
+		// Accept connections and login before we register a new NetworkManager.
 		this.acceptThread = new AcceptThread("Accept thread", server, this);
 		acceptThread.start();
 	}
@@ -27,14 +38,15 @@ public class ListenThread extends Thread {
 	public void run() {
 		Socket socket = null;
 		
-		while (!serverSocket.isClosed()) {
+		while (server.isRunning()) {
 			try {
 				socket = serverSocket.accept();
 				
-				if (socket != null && socket.isBound()) {
-					// Add the socket to the pending connections list.
-	    			acceptThread.addToPendigConnections(socket);
-	    			server.log(Level.INFO, "Connection accepted from: " + socket.getRemoteSocketAddress().toString());
+				if (socket != null) {
+					// Add the socket to the queue.
+					synchronized (acceptThread) {
+						acceptThread.queue(socket);
+					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -42,24 +54,11 @@ public class ListenThread extends Thread {
 		}
 	}
 	
+	public GameServer getServer() {
+		return server;
+	}
+	
 	public ServerSocket getServerSocket() {
 		return serverSocket;
 	}
 }
-
-//synchronized (delay) {
-//	InetAddress address = socket.getInetAddress();
-//	
-//	// Limit connection attempts.
-//    if (delay.containsKey(address) && System.currentTimeMillis() - ((Long) delay.get(address)).longValue() < 5000L) {
-//        delay.put(address, Long.valueOf(System.currentTimeMillis()));
-//        socket.close();
-//    } else {
-//    	// Add the socket to the pending connections list.
-//		acceptThread.addToPendigConnections(socket);
-//		server.log(Level.INFO, "Connection accepted from: " + socket.getRemoteSocketAddress().toString());
-//		
-//		// Put connection in HashMap.
-//    	delay.put(address, Long.valueOf(System.currentTimeMillis()));
-//    }
-//}

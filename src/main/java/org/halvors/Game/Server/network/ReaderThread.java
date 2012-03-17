@@ -12,26 +12,22 @@ public class ReaderThread extends Thread {
 	
 	public ReaderThread(String name, NetworkManager networkManager) {
 		super(name);
-		this.networkManager = networkManager;
-		this.input = networkManager.getInput();
 		
+		this.networkManager = networkManager;
+		this.input = networkManager.getDataInputStream();
 	}
 	
 	@Override
 	public void run() {
 		Packet packet = null;
 		
-		while (networkManager.isConnected()) {
+		while (true) {
 			try {
 				packet = PacketUtil.readPacket(input);
 				
-				if (packet != null && input != null) {
+				if (packet != null) {
 					PacketUtil.handlePacket(packet, networkManager.getServerHandler());
 				}
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

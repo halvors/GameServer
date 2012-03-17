@@ -1,15 +1,25 @@
 package org.halvors.Game.Server;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 
 public class Configuration {
 	private final GameServer server;
     private final Properties properties = new Properties();
     private final File file;
+    
+    private final Set<String> banList = new HashSet<String>();
+    private final File banListFile = new File("banlist.txt");
 
     public Configuration(GameServer server, File file) {
     	this.server = server;
@@ -26,6 +36,8 @@ public class Configuration {
             server.log(Level.WARNING, file + " does not exist");
             createConfiguration();
         }
+        
+        loadBanListFile();
     }
 
     public void createConfiguration() {
@@ -74,5 +86,46 @@ public class Configuration {
     public void setProperty(String s, boolean flag) {
     	properties.setProperty(s, (new StringBuilder()).append("").append(flag).toString());
         saveConfiguration();
+    }
+    
+    public void banPlayer(String name) {
+    	banList.add(name.toLowerCase());
+    	saveBanListFile();
+    }
+    
+    public void unbanPlayer(String name) {
+    	banList.remove(name.toLowerCase());
+    	saveBanListFile();
+    }
+    
+    private void loadBanListFile() {
+        try {
+        	banList.clear();
+            
+            BufferedReader reader = new BufferedReader(new FileReader(banListFile));
+            
+            for (String s = ""; (s = reader.readLine()) != null;) {
+            	banList.add(s.trim().toLowerCase());
+            }
+
+            reader.close();
+        } catch (Exception e) {
+            server.log(Level.WARNING, "Failed to load ban list: " + e.toString());
+        }
+    }
+
+    private void saveBanListFile() {
+        try {
+            PrintWriter writer = new PrintWriter(new FileWriter(banListFile, false));
+            String s;
+            
+            for (Iterator<String> it = banList.iterator(); it.hasNext(); writer.println(s)) {
+                s = (String) it.next();
+            }
+
+            writer.close();
+        } catch (Exception e) {
+            server.log(Level.WARNING, "Failed to save ban list: " + e.toString());
+        }
     }
 }

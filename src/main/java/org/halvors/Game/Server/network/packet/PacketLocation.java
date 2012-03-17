@@ -8,11 +8,9 @@ import java.util.UUID;
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.Location;
 import org.halvors.Game.Server.World;
-import org.halvors.Game.Server.entity.Player;
 
 public class PacketLocation extends Packet {
 	private final GameServer server = GameServer.getInstance();
-	
 	private Location loc;
 	
 	public PacketLocation() {
@@ -47,11 +45,6 @@ public class PacketLocation extends Packet {
 		output.writeFloat(loc.getZ());
 		output.writeFloat(loc.getPitch());
 		output.writeFloat(loc.getYaw());
-	}
-	
-	@Override
-	public void run(Player player) {
-		
 	}
 	
 	public Location getLocation() {

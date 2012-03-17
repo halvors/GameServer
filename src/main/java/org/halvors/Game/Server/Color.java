@@ -119,8 +119,8 @@ public enum Color {
     }
 
     static {
-        for (Color color : Color.values()) {
-            colors.put(color.getCode(), color);
+        for (Color c : Color.values()) {
+            colors.put(c.getCode(), c);
         }
     }
 }

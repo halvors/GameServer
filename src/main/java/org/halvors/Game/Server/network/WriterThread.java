@@ -12,20 +12,23 @@ public class WriterThread extends Thread {
 	
 	public WriterThread(String name, NetworkManager networkManager) {
 		super(name);
+		
 		this.networkManager = networkManager;
-		this.output = networkManager.getOutput();
+		this.output = networkManager.getDataOutputStream();
 	}
 	
 	@Override
 	public void run() {
 		Packet packet = null;
 		
-		while (networkManager.isConnected()) {
+		while (true) {
 			try {
-				packet = networkManager.getPacketQueue().poll();
+				synchronized (networkManager.getPacketQueue()) {
+					packet = networkManager.getPacketQueue().poll();
+				}
 				
 				if (output != null && packet != null) {
-					PacketUtil.writePacket(packet, output);
+					PacketUtil.writePacket(output, packet);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
