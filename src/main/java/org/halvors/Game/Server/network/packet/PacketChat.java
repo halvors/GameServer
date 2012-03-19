@@ -25,7 +25,8 @@ public class PacketChat extends Packet {
 		output.writeUTF(message);
 	}
 	
-	public int getPacketSize() {
+	@Override
+	public int getSize() {
 		return message.length();
 	}
 	

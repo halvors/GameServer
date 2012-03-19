@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
-import org.halvors.Game.Server.network.packet.Packet;
+import org.halvors.Game.Server.network.packet.IPacket;
 import org.halvors.Game.Server.network.packet.PacketUtil;
 
 public class ReaderThread extends Thread {
@@ -23,7 +23,7 @@ public class ReaderThread extends Thread {
 	
 	@Override
 	public void run() {
-		Packet packet = null;
+		IPacket packet = null;
 		
 		while (true) {
 			try {
@@ -32,7 +32,7 @@ public class ReaderThread extends Thread {
 				if (packet != null) {
 					PacketUtil.handlePacket(packet, networkManager.getServerHandler());
 					
-					server.log(Level.INFO, "Packet with id: " + packet.getPacketId() + " received.");
+					server.log(Level.INFO, "Packet with id: " + packet.getId() + " received.");
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

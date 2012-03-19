@@ -7,30 +7,33 @@ import java.io.IOException;
 /**
  * Represents a base packet.
  */
-public abstract class Packet {
+public class Packet implements IPacket {
 	public Packet() {
 		
 	}
 	
-    public abstract void readData(DataInputStream input) throws IOException;
-	
-	public abstract void writeData(DataOutputStream output) throws IOException;
-	
-	/**
-	 * Get the PacketType.
-	 * 
-	 * @return the PacketType.
-	 */
-	public PacketType getPacketType() {
-		return PacketType.getPacketFromClass(getClass());
+	@Override
+	public void readData(DataInputStream input) throws IOException {
+		
+	}
+
+	@Override
+	public void writeData(DataOutputStream output) throws IOException {
+		
 	}
 	
-	/**
-	 * Get the packet id.
-	 * 
-	 * @return the packet id.
-	 */
-	public int getPacketId() {
-		return getPacketType().getPacketId();
+	@Override
+	public int getId() {
+		return getType().getId();
+	}
+	
+	@Override
+	public PacketType getType() {
+		return PacketType.getPacketFromClass(getClass());
+	}
+
+	@Override
+	public int getSize() {
+		return 0;
 	}
 }

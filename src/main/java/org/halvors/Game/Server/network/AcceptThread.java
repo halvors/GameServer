@@ -8,7 +8,7 @@ import java.util.Queue;
 import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
-import org.halvors.Game.Server.network.packet.Packet;
+import org.halvors.Game.Server.network.packet.IPacket;
 import org.halvors.Game.Server.network.packet.PacketLogin;
 import org.halvors.Game.Server.network.packet.PacketUtil;
 
@@ -28,7 +28,7 @@ public class AcceptThread extends Thread {
 	public void run() {
 		Socket socket = null;
 		DataInputStream input = null;
-		Packet packet = null;
+		IPacket packet = null;
 		LoginHandler loginHandler = null;
 		
 		while (server.isRunning()) {

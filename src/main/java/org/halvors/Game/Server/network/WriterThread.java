@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
-import org.halvors.Game.Server.network.packet.Packet;
+import org.halvors.Game.Server.network.packet.IPacket;
 import org.halvors.Game.Server.network.packet.PacketUtil;
 
 public class WriterThread extends Thread {
@@ -23,7 +23,7 @@ public class WriterThread extends Thread {
 	
 	@Override
 	public void run() {
-		Packet packet = null;
+		IPacket packet = null;
 		
 		while (true) {
 			try {
@@ -34,7 +34,7 @@ public class WriterThread extends Thread {
 				if (output != null && packet != null) {
 					PacketUtil.writePacket(output, packet);
 					
-					server.log(Level.INFO, "Packet with id: " + packet.getPacketId() + " sent.");
+					server.log(Level.INFO, "Packet with id: " + packet.getId() + " sent.");
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

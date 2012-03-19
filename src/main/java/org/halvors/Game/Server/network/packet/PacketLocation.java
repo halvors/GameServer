@@ -47,6 +47,11 @@ public class PacketLocation extends Packet {
 		output.writeFloat(loc.getYaw());
 	}
 	
+	@Override
+	public int getSize() {
+		return 0;
+	}
+	
 	public Location getLocation() {
 		return loc;
 	}

@@ -1,5 +1,6 @@
 package org.halvors.Game.Server.network;
 
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.entity.Player;
+import org.halvors.Game.Server.network.packet.IPacket;
 import org.halvors.Game.Server.network.packet.Packet;
 import org.halvors.Game.Server.network.packet.PacketDisconnect;
 
@@ -19,7 +21,7 @@ public class NetworkManager {
 	
 	private final ReaderThread readerThread;
 	private final WriterThread writerThread;
-	private final Queue<Packet> packetQueue = new LinkedList<Packet>();
+	private final Queue<IPacket> packetQueue = new LinkedList<IPacket>();
     
 	private Socket socket;
 	private DataInputStream input;
@@ -27,7 +29,7 @@ public class NetworkManager {
     private ServerHandler serverHandler;
     private Player player;
 	
-	public NetworkManager(GameServer server, Socket socket) {
+	public NetworkManager(GameServer server, Socket socket) throws IOException {
 		this.server = server;
 		this.socket = socket;
 		
@@ -38,12 +40,8 @@ public class NetworkManager {
 			e.printStackTrace();
 		} 
 		
-		try {
-			this.input = new DataInputStream(socket.getInputStream());
-			this.output = new DataOutputStream(socket.getOutputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.input = new DataInputStream(socket.getInputStream());
+		this.output = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream(), 5120));
 		
 		this.readerThread = new ReaderThread(server, "Reader thread", this);
         this.writerThread = new WriterThread(server, "Writer thread", this);
@@ -56,11 +54,11 @@ public class NetworkManager {
 	 * 
 	 * @param packet
 	 */
-	public void sendPacket(Packet packet) {
+	public void sendPacket(IPacket packet) {
         if (packet != null) {
         	packetQueue.add(packet);
         	
-        	server.log(Level.INFO, "Packet with id: " + packet.getPacketId() + " queued.");
+        	server.log(Level.INFO, "Packet with id: " + packet.getId() + " queued.");
         }
     }
 	
@@ -77,7 +75,7 @@ public class NetworkManager {
 	
 	public void disconnect(String reason) {
 		// Send the leave message.
-		server.broadcast(player.getName() + " left the game.");
+		server.broadcast(player.getName() + " left the game."); // TODO: Fix NPE.
 		
 		// Tell the client to do the disconnect.
 		sendPacket(new PacketDisconnect(reason));
@@ -87,8 +85,8 @@ public class NetworkManager {
 	public void shutdown() {
 		wakeThreads();
 		
-		readerThread.stop();
-		writerThread.stop();
+//		readerThread.stop();
+//		writerThread.stop();
 		
     	// Close socket.
         try {
@@ -139,8 +137,12 @@ public class NetworkManager {
 		this.serverHandler = serverHandler;
 	}
 	
-	public Queue<Packet> getPacketQueue() {
-		return packetQueue;
+	public Player getPlayer() {
+		return player;
+	}
+	
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 
 	public DataInputStream getDataInputStream() {
@@ -157,5 +159,9 @@ public class NetworkManager {
 	
 	public WriterThread getWriterThread() {
 		return writerThread;
+	}
+	
+	public Queue<IPacket> getPacketQueue() {
+		return packetQueue;
 	}
 }

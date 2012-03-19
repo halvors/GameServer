@@ -29,7 +29,8 @@ public class PacketLogin extends Packet {
 		output.writeUTF(version);
 	}
 	
-	public int getPacketSize() {
+	@Override
+	public int getSize() {
 		return username.length() + version.length();
 	}
 	

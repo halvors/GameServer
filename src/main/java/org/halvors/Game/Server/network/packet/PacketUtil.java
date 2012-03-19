@@ -7,14 +7,14 @@ import java.io.IOException;
 import org.halvors.Game.Server.network.ServerHandler;
 
 public class PacketUtil {
-	public static Packet readPacket(DataInputStream input) throws IOException {
+	public static IPacket readPacket(DataInputStream input) throws IOException {
 		if (input != null) {
 			// Read the id form the DataInputStream.
 			int id = input.read();
             
 			// Packet's id can't be than 0.
 			if (id != 0) {
-				Packet packet = getPacketFromId(id);
+				IPacket packet = getPacketFromId(id);
             	
 	            // Check if the packet was found in the HashMap, if not throw an Exception.
 	            if (packet != null) {
@@ -31,10 +31,10 @@ public class PacketUtil {
 		return null;
 	}
 	
-    public static void writePacket(DataOutputStream output, Packet packet) throws IOException {
+    public static void writePacket(DataOutputStream output, IPacket packet) throws IOException {
     	if (output != null && packet != null) {
     		// Write the packet id to the stream.
-    		output.write(packet.getPacketId());
+    		output.write(packet.getId());
     		
     		// Then write the packet data.
         	packet.writeData(output);
@@ -49,8 +49,8 @@ public class PacketUtil {
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
 	 */
-	public static Packet getPacketFromId(int id) {
-		Class<? extends Packet> packet = PacketType.getPacketFromId(id).getPacketClass();
+	public static IPacket getPacketFromId(int id) {
+		Class<? extends IPacket> packet = PacketType.getPacketFromId(id).getPacketClass();
 		
 		if (packet != null) {
 			try {
@@ -69,11 +69,11 @@ public class PacketUtil {
      * Handle packet's after being read.
      * 
      * @param packet
-     * @param handler
+     * @param serverHandler
      */
-	public static void handlePacket(Packet packet, ServerHandler serverHandler) {
+	public static void handlePacket(IPacket packet, ServerHandler serverHandler) {
 		if (packet != null && serverHandler != null) {
-			PacketType type = packet.getPacketType();
+			PacketType type = packet.getType();
 			
 			// Detect PacketType and handle it in the right way.
 			switch (type) {

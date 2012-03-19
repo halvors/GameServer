@@ -25,7 +25,8 @@ public class PacketDisconnect extends Packet {
 		output.writeUTF(reason);
 	}
 	
-	public int getPacketSize() {
+	@Override
+	public int getSize() {
 		return reason.length();
 	}
 	

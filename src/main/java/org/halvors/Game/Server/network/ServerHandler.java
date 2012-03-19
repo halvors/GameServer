@@ -1,8 +1,5 @@
 package org.halvors.Game.Server.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
@@ -22,6 +19,7 @@ public class ServerHandler {
 		
 		// Set this as ServerHandler for NetworkManager and Player.
 		networkManager.setServerHandler(this);
+		networkManager.setPlayer(player);
 		player.setServerHandler(this);
 		player.setNetworkManager(networkManager);
 	}

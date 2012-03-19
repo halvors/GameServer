@@ -1,5 +1,6 @@
 package org.halvors.Game.Server.network;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
 
@@ -11,8 +12,8 @@ public class LoginHandler {
 	private final GameServer server;
 	private final Socket socket;
 	
-	private Player player;
 	private NetworkManager networkManager; // TODO: Where initialize this?
+	private Player player;
 	private ServerHandler serverHandler;
 	
 	public LoginHandler(GameServer server, Socket socket) {
@@ -20,7 +21,7 @@ public class LoginHandler {
 		this.socket = socket;
 	}
 	
-	public void handleLogin(PacketLogin packet) {
+	public void handleLogin(PacketLogin packet) throws IOException {
 		String name = packet.getUsername();
 		String version = packet.getVersion();
 		
@@ -43,5 +44,17 @@ public class LoginHandler {
 			// Send login message.
 			server.broadcast(name + " joined the game.");
 		}
+	}
+	
+	public NetworkManager getNetworkManager() {
+		return networkManager;
+	}
+	
+	public Player getPlayer() {
+		return player;
+	}
+	
+	public ServerHandler getServerHandler() {
+		return serverHandler;
 	}
 }
