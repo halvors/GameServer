@@ -37,7 +37,7 @@ public class GameServer {
 		addWorld("world");
 		
 		// Load configuration.
-		String host = config.getStringProperty("host", "0.0.0.0");
+		String host = config.getStringProperty("ip-address", "0.0.0.0");
 		int port = config.getIntProperty("port", 22075);
 		
 		// Check if host is greater than 0.

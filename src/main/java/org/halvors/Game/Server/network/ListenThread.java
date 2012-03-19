@@ -25,7 +25,7 @@ public class ListenThread extends Thread {
 			
 			server.log(Level.INFO, "Server is running on port: "+ Integer.toString(port));
 		} catch (IOException e) {
-			server.log(Level.WARNING, "Failed to bind to port: " + Integer.toString(port));
+			server.log(Level.WARNING, "Failed to bind to port: " + Integer.toString(port) + ", is it already in use?");
 			e.printStackTrace();
 		}
 		

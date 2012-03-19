@@ -1,5 +1,8 @@
 package org.halvors.Game.Server.network;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
@@ -23,6 +26,14 @@ public class ServerHandler {
 		player.setNetworkManager(networkManager);
 	}
 	
+	public void handleErrorMessage(String reason, Object aobj[]) {
+		server.log(Level.INFO, player.getName() + " lost connection: " + reason);
+        
+        server.broadcast(player.getName() + " left the game.");
+        
+        // Logout player here.
+	}
+	
 	public void handlePacketChat(PacketChat packet) {
 		String message = player.getName() + ": " + packet.getMessage();
 		
@@ -33,6 +44,7 @@ public class ServerHandler {
 	}
 	
 	public void handlePacketDisconnect(PacketDisconnect packet) {
+		networkManager.shutdown();
 		server.broadcast(player.getName() + " left the game.");
 	}
 

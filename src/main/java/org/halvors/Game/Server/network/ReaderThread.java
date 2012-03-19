@@ -2,17 +2,21 @@ package org.halvors.Game.Server.network;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.logging.Level;
 
+import org.halvors.Game.Server.GameServer;
 import org.halvors.Game.Server.network.packet.Packet;
 import org.halvors.Game.Server.network.packet.PacketUtil;
 
 public class ReaderThread extends Thread {
+	private final GameServer server;
 	private final NetworkManager networkManager;
 	private final DataInputStream input;
 	
-	public ReaderThread(String name, NetworkManager networkManager) {
+	public ReaderThread(GameServer server, String name, NetworkManager networkManager) {
 		super(name);
 		
+		this.server = server;
 		this.networkManager = networkManager;
 		this.input = networkManager.getDataInputStream();
 	}
@@ -27,6 +31,8 @@ public class ReaderThread extends Thread {
 				
 				if (packet != null) {
 					PacketUtil.handlePacket(packet, networkManager.getServerHandler());
+					
+					server.log(Level.INFO, "Packet with id: " + packet.getPacketId() + " received.");
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

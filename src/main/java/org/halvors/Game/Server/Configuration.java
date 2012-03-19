@@ -28,7 +28,7 @@ public class Configuration {
         if (file.exists()) {
             try {
                 properties.load(new FileInputStream(file));
-            } catch (Exception exception) {
+            } catch (Exception e) {
                 //a.log(Level.WARNING, "Failed to load " + file1, exception);
                 createConfiguration();
             }
@@ -47,7 +47,7 @@ public class Configuration {
     
     public void saveConfiguration() {
         try {
-            properties.store(new FileOutputStream(file), "Game server properties");
+            properties.store(new FileOutputStream(file), "GameServer properties");
         } catch (Exception e) {
             server.log(Level.WARNING, "Failed to save " + file);
             createConfiguration();

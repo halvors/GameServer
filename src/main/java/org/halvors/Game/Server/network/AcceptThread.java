@@ -29,7 +29,7 @@ public class AcceptThread extends Thread {
 		Socket socket = null;
 		DataInputStream input = null;
 		Packet packet = null;
-		NetworkManager networkManager = null;
+		LoginHandler loginHandler = null;
 		
 		while (server.isRunning()) {
 			try {
@@ -43,8 +43,8 @@ public class AcceptThread extends Thread {
 						server.log(Level.INFO, "Accepted connection from: " + socket.getRemoteSocketAddress().toString());
 						
 						if (packet != null && packet instanceof PacketLogin) {
-							networkManager = new NetworkManager(server, socket);
-							networkManager.login((PacketLogin) packet);
+							loginHandler = new LoginHandler(server, socket);
+							loginHandler.handleLogin((PacketLogin) packet);
 						}
 					}
 				}

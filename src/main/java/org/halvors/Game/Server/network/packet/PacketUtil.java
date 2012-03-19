@@ -13,7 +13,7 @@ public class PacketUtil {
 			int id = input.read();
             
 			// Packet's id can't be than 0.
-			if (id >= 0) {
+			if (id != 0) {
 				Packet packet = getPacketFromId(id);
             	
 	            // Check if the packet was found in the HashMap, if not throw an Exception.
