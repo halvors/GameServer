@@ -12,7 +12,7 @@ public class LoginHandler {
 	private final GameServer server;
 	private final Socket socket;
 	
-	private NetworkManager networkManager; // TODO: Where initialize this?
+	private NetworkManager networkManager;
 	private Player player;
 	private ServerHandler serverHandler;
 	
@@ -31,9 +31,9 @@ public class LoginHandler {
 			player = new Player(server, name);
 			serverHandler = new ServerHandler(server, networkManager, player);
 			
-			if (server.getVersion() != version) {
-				networkManager.disconnect("You are using an old version: " + version);
-			}
+//			if (server.getVersion() != version) {
+//				networkManager.disconnect("You are using an old version: " + version);
+//			}
 			
 			// Send reply to the client.
 			networkManager.sendPacket(new PacketLogin(name, version));

@@ -11,9 +11,9 @@ public class PacketUtil {
 		if (input != null) {
 			// Read the id form the DataInputStream.
 			int id = input.read();
-            
-			// Packet's id can't be than 0.
-			if (id != 0) {
+			
+			// Packet's id can't be lesser than 0.
+			if (id > 0) {
 				IPacket packet = getPacketFromId(id);
             	
 	            // Check if the packet was found in the HashMap, if not throw an Exception.
@@ -71,18 +71,18 @@ public class PacketUtil {
      * @param packet
      * @param serverHandler
      */
-	public static void handlePacket(IPacket packet, ServerHandler serverHandler) {
-		if (packet != null && serverHandler != null) {
+	public static void handlePacket(IPacket packet, ServerHandler handler) {
+		if (packet != null && handler != null) {
 			PacketType type = packet.getType();
 			
 			// Detect PacketType and handle it in the right way.
 			switch (type) {
 			case PacketChat:
-				serverHandler.handlePacketChat((PacketChat) packet);
+				handler.handlePacketChat((PacketChat) packet);
 				break;
 				
 	        case PacketDisconnect:
-	        	serverHandler.handlePacketDisconnect((PacketDisconnect) packet);
+	        	handler.handlePacketDisconnect((PacketDisconnect) packet);
 	        	break;
 			}
 		}

@@ -38,10 +38,11 @@ public class NetworkManager {
 			socket.setTrafficClass(24); // TODO: Check this?
 		} catch (SocketException e) {
 			e.printStackTrace();
-		} 
+		}
 		
 		this.input = new DataInputStream(socket.getInputStream());
-		this.output = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream(), 5120));
+		this.output = new DataOutputStream(socket.getOutputStream());
+//		this.output = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream(), 5120));
 		
 		this.readerThread = new ReaderThread(server, "Reader thread", this);
         this.writerThread = new WriterThread(server, "Writer thread", this);
@@ -79,14 +80,15 @@ public class NetworkManager {
 		
 		// Tell the client to do the disconnect.
 		sendPacket(new PacketDisconnect(reason));
+		
 		shutdown();
 	}
 	
 	public void shutdown() {
 		wakeThreads();
 		
-//		readerThread.stop();
-//		writerThread.stop();
+		readerThread.stop();
+		writerThread.stop();
 		
     	// Close socket.
         try {

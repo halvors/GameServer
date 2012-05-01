@@ -24,7 +24,7 @@ public class ServerHandler {
 		player.setNetworkManager(networkManager);
 	}
 	
-	public void handleErrorMessage(String reason, Object aobj[]) {
+	public void handleErrorMessage(String reason, Object obj[]) {
 		server.log(Level.INFO, player.getName() + " lost connection: " + reason);
         
         server.broadcast(player.getName() + " left the game.");
