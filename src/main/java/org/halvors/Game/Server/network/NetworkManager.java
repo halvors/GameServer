@@ -1,6 +1,5 @@
 package org.halvors.Game.Server.network;
 
-import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -92,8 +91,8 @@ public class NetworkManager {
 	public void shutdown() throws IOException {
 		wakeThreads();
 		
-		readerThread.stop();
-		writerThread.stop();
+//		readerThread.stop();
+//		writerThread.stop();
 		
     	// Close socket.
 		socket.close();

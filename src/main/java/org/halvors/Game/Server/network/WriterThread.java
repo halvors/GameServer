@@ -41,4 +41,12 @@ public class WriterThread extends Thread {
 			}
 		}
 	}
+	
+	public GameServer getServer() {
+		return server;
+	}
+	
+	public NetworkManager getNetworkManager() {
+		return networkManager;
+	}
 }
