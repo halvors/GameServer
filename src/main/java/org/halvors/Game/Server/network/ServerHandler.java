@@ -1,5 +1,6 @@
 package org.halvors.Game.Server.network;
 
+import java.io.IOException;
 import java.util.logging.Level;
 
 import org.halvors.Game.Server.GameServer;
@@ -42,7 +43,12 @@ public class ServerHandler {
 	}
 	
 	public void handlePacketDisconnect(PacketDisconnect packet) {
-		networkManager.shutdown();
+		try {
+			networkManager.shutdown();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		server.broadcast(player.getName() + " left the game.");
 	}
 

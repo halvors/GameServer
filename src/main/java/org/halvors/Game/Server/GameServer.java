@@ -157,6 +157,16 @@ public class GameServer {
 		return players.contains(player);
 	}
 	
+	public boolean hasPlayer(String name) {
+		for (Player p : players) {
+			if (p.getName().equalsIgnoreCase(name)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	public Player addPlayer(Player player) {
 		if (player != null && !players.contains(player)) {
 			players.add(player);

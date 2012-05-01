@@ -18,9 +18,6 @@ public class Player extends LivingEntity {
 		
 		this.server = server;
 		this.name = name;
-		
-		// Register the player in the server instance.
-		server.addPlayer(this);
 	}
 	
 	public String getName() {

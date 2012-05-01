@@ -25,15 +25,19 @@ public class LoginHandler {
 		String name = packet.getUsername();
 		String version = packet.getVersion();
 		
-		if (name != null && version != null) {			
-			// Create Player and ServerHandler.
-			networkManager = new NetworkManager(server, socket);
-			player = new Player(server, name);
-			serverHandler = new ServerHandler(server, networkManager, player);
+		if (name != null && version != null) {
+			if (server.hasPlayer(name)) {
+				server.getPlayer(name).kick("Logged in from another location.");
+			}
 			
-//			if (server.getVersion() != version) {
-//				networkManager.disconnect("You are using an old version: " + version);
-//			}
+			// Create Player and ServerHandler.
+			this.networkManager = new NetworkManager(server, socket);
+			this.player = server.addPlayer(name);
+			this.serverHandler = new ServerHandler(server, networkManager, player);
+			
+			if (server.getVersion().equalsIgnoreCase(version)) {
+				player.kick("You are using an old version: " + version);
+			}
 			
 			// Send reply to the client.
 			networkManager.sendPacket(new PacketLogin(name, version));

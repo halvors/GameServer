@@ -43,6 +43,7 @@ public class NetworkManager {
 		this.input = new DataInputStream(socket.getInputStream());
 		this.output = new DataOutputStream(socket.getOutputStream());
 //		this.output = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream(), 5120));
+//		this.output = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 		
 		this.readerThread = new ReaderThread(server, "Reader thread", this);
         this.writerThread = new WriterThread(server, "Writer thread", this);
@@ -76,59 +77,68 @@ public class NetworkManager {
 	
 	public void disconnect(String reason) {
 		// Send the leave message.
-		server.broadcast(player.getName() + " left the game."); // TODO: Fix NPE.
+		server.broadcast(player.getName() + " left the game.");
 		
 		// Tell the client to do the disconnect.
 		sendPacket(new PacketDisconnect(reason));
 		
-		shutdown();
+		try {
+			shutdown();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public void shutdown() {
+	public void shutdown() throws IOException {
 		wakeThreads();
 		
 		readerThread.stop();
 		writerThread.stop();
 		
     	// Close socket.
-        try {
-			socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        
-        socket = null;
+		socket.close();
+        this.socket = null;
         
         // Close input stream.
-        try {
-			input.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        
-        input = null;
+        input.close();
+        this.input = null;
         
         // Close input stream.
-        try {
-			output.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        
-        output = null;
+		output.close();
+        this.output = null;
     }
 	
 	public void wakeThreads() {
 		readerThread.interrupt();
 		writerThread.interrupt();
 	}
-
+	
+	public GameServer getServer() {
+		return server;
+	}
+	
+	public ReaderThread getReaderThread() {
+		return readerThread;
+	}
+	
+	public WriterThread getWriterThread() {
+		return writerThread;
+	}
+	
+	public Queue<IPacket> getPacketQueue() {
+		return packetQueue;
+	}
+	
 	public Socket getSocket() {
 		return socket;
 	}
-
-	public GameServer getServer() {
-		return server;
+	
+	public DataInputStream getDataInputStream() {
+		return input;
+	}
+	
+	public DataOutputStream getDataOutputStream() {
+		return output;
 	}
 	
 	public ServerHandler getServerHandler() {
@@ -145,25 +155,5 @@ public class NetworkManager {
 	
 	public void setPlayer(Player player) {
 		this.player = player;
-	}
-
-	public DataInputStream getDataInputStream() {
-		return input;
-	}
-	
-	public DataOutputStream getDataOutputStream() {
-		return output;
-	}
-	
-	public ReaderThread getReaderThread() {
-		return readerThread;
-	}
-	
-	public WriterThread getWriterThread() {
-		return writerThread;
-	}
-	
-	public Queue<IPacket> getPacketQueue() {
-		return packetQueue;
 	}
 }
